@@ -1,9 +1,8 @@
 {
   "schemaVersion": 1,
-  "checkedOn": "2026-11-01",
+  "checkedOn": "2026-11-02",
   "scope": "project",
   "canonicalDirectory": ".agents/skills",
-  "claudeAliases": ".claude/skills",
   "skills": [
     {
       "name": "expo-design-system",
@@ -145,9 +144,10 @@
         "upstream references retained",
         "outbound feedback instructions removed where present",
         "restore upstream guide; select relational from PostgreSQL config; pnpm workspace command syntax; migrations workflow",
-        "generic starter workspace names; product documentation is supplied by each new app"
+        "generic starter workspace names; product documentation is supplied by each new app",
+        "single root generate skill; no app-local copies or aliases; Hygen stays in apps/api"
       ],
-      "installedSkillSha256": "f70e511af1f64e3a6ffda8b5382308b02162d5a072543984bf58bd579a0b8fd3"
+      "installedSkillSha256": "3ad3ba1f09ad96827c13f41a16dd824f7e09dfa44982da5ca3d1bac610e9b151"
     }
   ],
   "sourceMetrics": {
