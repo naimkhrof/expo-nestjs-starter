@@ -1,0 +1,7 @@
+{
+  "name": "Expo NestJS Starter",
+  "slug": "expo-nestjs-starter",
+  "scope": "starter",
+  "bundleId": "com.example.starter",
+  "scheme": "starter"
+}

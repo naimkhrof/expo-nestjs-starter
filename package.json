@@ -1,0 +1,42 @@
+{
+  "name": "expo-nestjs-starter",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.34.9",
+  "engines": {
+    "node": ">=24.3.0 <27"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:mobile": "pnpm --filter @starter/mobile dev",
+    "dev:api": "pnpm --filter @starter/api dev",
+    "ios": "pnpm --filter @starter/mobile ios",
+    "android": "pnpm --filter @starter/mobile android",
+    "web": "pnpm --filter @starter/mobile web",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "db:up": "docker compose up -d --wait postgres",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres",
+    "db:migrate": "pnpm --filter @starter/api migration:run",
+    "db:seed": "pnpm --filter @starter/api seed",
+    "mail:up": "docker compose --profile mail up -d --wait maildev",
+    "spec": "node scripts/openspec.mjs",
+    "setup:env": "node scripts/setup.mjs",
+    "expo:doctor": "pnpm --filter @starter/mobile run doctor",
+    "starter:init": "node scripts/init.mjs",
+    "test:starter": "node --test scripts/starter.test.mjs"
+  },
+  "devDependencies": {
+    "@fission-ai/openspec": "1.15.0",
+    "turbo": "2.11.10"
+  },
+  "pnpm": {
+    "overrides": {
+      "webpack>schema-utils": "4.3.3",
+      "terser-webpack-plugin>schema-utils": "4.3.3"
+    }
+  }
+}

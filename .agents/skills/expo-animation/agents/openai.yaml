@@ -1,0 +1,7 @@
+interface:
+  display_name: Expo — animations
+  short_description: Gestes, transitions, clavier et mouvements accessibles
+  default_prompt: Use $expo-animation to build a polished, accessible animation for
+    this Expo app.
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,8 @@
+interface:
+  display_name: Expo — development builds
+  short_description: Builds iOS/Android, simulateurs et connexion Metro
+  default_prompt: Use $expo-dev-client to decide whether an Expo development client
+    is required, configure development EAS profiles, build local or cloud dev clients,
+    and connect them to Metro.
+policy:
+  allow_implicit_invocation: true

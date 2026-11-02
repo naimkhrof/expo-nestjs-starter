@@ -1,0 +1,5 @@
+interface:
+  display_name: "Turborepo"
+  short_description: "Workspace pnpm, tâches, cache et pipelines du monorepo"
+policy:
+  allow_implicit_invocation: true

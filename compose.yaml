@@ -1,0 +1,30 @@
+name: expo-nestjs-starter
+
+services:
+  postgres:
+    image: postgres:17.9-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME:?Run pnpm setup:env first}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?Run pnpm setup:env first}
+      POSTGRES_DB: ${DATABASE_NAME:?Run pnpm setup:env first}
+    ports:
+      - "127.0.0.1:${DATABASE_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Optional SMTP inbox for the boilerplate's email authentication flows.
+  maildev:
+    image: maildev/maildev:2.2.1
+    profiles: [mail]
+    ports:
+      - "127.0.0.1:1080:1080"
+      - "127.0.0.1:1025:1025"
+
+volumes:
+  postgres_data:
