@@ -9,6 +9,8 @@ description: "Generate a persisted NestJS resource or add a domain property in a
 
 Scope: apps/api. This is the restored Brocoders generator skill. Run its pnpm commands from the monorepo root. For persistence variant, read DATABASE_TYPE from the local backend configuration (or .env.example if no local override is available). postgres selects relational. Do not select all-db merely because its script exists. Preserve the original generator relationship and DTO rules below.
 
+The only maintained copy of this skill is `.agents/skills/generate/` at the repository root. Do not create app-local skill copies or aliases. Hygen templates (`.hygen/`) and configuration (`.hygen.js`) stay in `apps/api`; the pnpm workspace filter below runs Hygen there when invoked from the repository root.
+
 Source: [brocoders/nestjs-boilerplate](https://github.com/brocoders/nestjs-boilerplate/tree/9620f159eefe38f47747d02ab162852367c5472c/.claude/skills/generate). Project-specific adaptations are tracked in `.agents/skills.lock.json`.
 
 

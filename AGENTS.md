@@ -6,6 +6,8 @@ Utiliser les scripts racine ou `pnpm --filter @starter/mobile …` et `pnpm --fi
 
 ## Guides techniques
 
+Chaque skill a une seule source dans `.agents/skills/` à la racine, y compris `generate`. Ne pas créer de copie ni d’alias de skill dans les apps.
+
 Avant d’intervenir, lire les consignes de l’app et le guide adapté dans `.agents/skills/` :
 
 | Zone | Guide |
