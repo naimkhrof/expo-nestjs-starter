@@ -7,7 +7,7 @@
     "node": ">=24.3.0 <27"
   },
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --ui=tui",
     "dev:mobile": "pnpm --filter @starter/mobile dev",
     "dev:api": "pnpm --filter @starter/api dev",
     "ios": "pnpm --filter @starter/mobile ios",

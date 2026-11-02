@@ -9,7 +9,7 @@
   },
   "main": "expo-router/entry",
   "scripts": {
-    "start": "expo start",
+    "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
@@ -37,7 +37,7 @@
     "check-all": "pnpm lint && pnpm typecheck && pnpm test",
     "test:ci": "jest --ci --runInBand --coverage",
     "test:watch": "pnpm run test --watch",
-    "dev": "expo start",
+    "dev": "expo start --dev-client",
     "build": "expo export --platform ios --platform android",
     "typecheck": "tsc --noEmit",
     "native:prebuild": "pnpm expo prebuild"

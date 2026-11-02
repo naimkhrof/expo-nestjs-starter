@@ -1,6 +1,6 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "ui": "stream",
+  "ui": "tui",
   "globalDependencies": [
     ".env",
     "apps/*/.env",
@@ -10,6 +10,7 @@
     "dev": {
       "cache": false,
       "persistent": true,
+      "interactive": true,
       "env": [
         "EXPO_PUBLIC_*",
         "APP_BUILD_ONLY_VAR",
