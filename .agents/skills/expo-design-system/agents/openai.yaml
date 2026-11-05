@@ -1,9 +1,0 @@
-interface:
-  display_name: Expo — design system
-  short_description: Écrans, tokens et composants Uniwind du mobile
-  default_prompt: 'Use $expo-design-system to set up or maintain the app''s design
-    system: create the src/theme token files, shape reusable components with variant/size/state
-    props, decide when a repeated view becomes a shared component, and audit screens
-    for design-system drift (hardcoded style values).'
-policy:
-  allow_implicit_invocation: true

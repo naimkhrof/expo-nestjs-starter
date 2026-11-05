@@ -1,8 +1,0 @@
-interface:
-  display_name: Expo — données et API
-  short_description: Requêtes, cache, mutations et états réseau du mobile
-  default_prompt: 'Use $expo-data-fetching for Expo data fetching work: fetch wrappers,
-    React Query or SWR setup, error handling, retry/cancellation, authenticated requests,
-    environment-based API URLs, offline behavior, and Expo Router loaders.'
-policy:
-  allow_implicit_invocation: true

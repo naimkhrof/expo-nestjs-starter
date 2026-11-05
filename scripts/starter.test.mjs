@@ -10,7 +10,7 @@ const source = fileURLToPath(new URL('../', import.meta.url));
 async function fixture(t) {
   const root = await mkdtemp(path.join(tmpdir(), 'starter-test-'));
   t.after(() => rm(root, { recursive: true, force: true }));
-  for (const rel of ['starter.config.json', 'package.json', 'compose.yaml', 'AGENTS.md', 'scripts', '.agents', '.env.example', 'apps/mobile/package.json', 'apps/mobile/.env.example', 'apps/api/package.json', 'apps/api/.env.example']) {
+  for (const rel of ['starter.config.json', 'package.json', 'compose.yaml', 'CLAUDE.md', 'scripts', '.claude', '.env.example', 'apps/mobile/package.json', 'apps/mobile/.env.example', 'apps/api/package.json', 'apps/api/.env.example']) {
     await mkdir(path.dirname(path.join(root, rel)), { recursive: true });
     await cp(path.join(source, rel), path.join(root, rel), { recursive: true });
   }

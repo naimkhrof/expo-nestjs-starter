@@ -1,5 +1,0 @@
-interface:
-  display_name: "Brocoders — génération"
-  short_description: "Entités et propriétés via les générateurs PostgreSQL"
-policy:
-  allow_implicit_invocation: true

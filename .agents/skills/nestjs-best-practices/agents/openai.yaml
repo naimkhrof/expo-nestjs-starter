@@ -1,5 +1,0 @@
-interface:
-  display_name: "NestJS — bonnes pratiques"
-  short_description: "Backend NestJS, DTO, auth, tests et requêtes TypeORM"
-policy:
-  allow_implicit_invocation: true

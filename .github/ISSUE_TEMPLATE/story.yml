@@ -1,0 +1,30 @@
+name: User story
+description: Une fonctionnalité livrable et testable de bout en bout
+labels: [story]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: Besoin
+      description: En tant que … je veux … afin de …
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critères d’acceptation
+      description: Un critère vérifiable par ligne. Chacun deviendra un test quand c’est possible.
+      value: |
+        - [ ]
+    validations:
+      required: true
+  - type: textarea
+    id: design
+    attributes:
+      label: Maquette
+      description: Lien Figma ou captures glissées ici.
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Règles métier, données, cas limites, hors périmètre.

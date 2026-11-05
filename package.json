@@ -23,14 +23,12 @@
     "db:migrate": "pnpm --filter @starter/api migration:run",
     "db:seed": "pnpm --filter @starter/api seed",
     "mail:up": "docker compose --profile mail up -d --wait maildev",
-    "spec": "node scripts/openspec.mjs",
     "setup:env": "node scripts/setup.mjs",
     "expo:doctor": "pnpm --filter @starter/mobile run doctor",
     "starter:init": "node scripts/init.mjs",
     "test:starter": "node --test scripts/starter.test.mjs"
   },
   "devDependencies": {
-    "@fission-ai/openspec": "1.15.0",
     "turbo": "2.11.10"
   },
   "pnpm": {

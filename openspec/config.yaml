@@ -1,8 +1,0 @@
-schema: spec-driven
-
-context: |
-  Monorepo pnpm/Turborepo avec Expo SDK 58 et NestJS 11.
-  Mobile : Expo Router, Uniwind/Tailwind, primitives Obytes.
-  API : architecture Brocoders, PostgreSQL/TypeORM.
-  Lire AGENTS.md et les guides techniques pertinents avant de planifier une modification.
-  Les exigences produit sont propres à chaque projet dérivé, dans docs/ lorsqu'elles existent.

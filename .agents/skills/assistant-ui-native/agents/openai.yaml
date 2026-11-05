@@ -1,5 +1,0 @@
-interface:
-  display_name: "assistant-ui — mobile"
-  short_description: "Conversation IA native, runtime et liaison au backend"
-policy:
-  allow_implicit_invocation: true

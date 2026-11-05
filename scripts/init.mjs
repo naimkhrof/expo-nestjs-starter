@@ -1,5 +1,4 @@
 import { readFile, readdir, writeFile, access } from 'node:fs/promises';
-import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -67,13 +66,6 @@ try {
   const compose = path.join(root, 'compose.yaml');
   edits.set(compose, (await readFile(compose, 'utf8')).replace(/^name: .+$/m, `name: ${next.slug}`));
   edits.set(path.join(root, 'starter.config.json'), JSON.stringify(next, null, 2) + '\n');
-  const lockPath = path.join(root, '.agents/skills.lock.json');
-  const lock = JSON.parse(await readFile(lockPath, 'utf8'));
-  for (const entry of lock.skills) {
-    const filename = path.join(root, '.agents/skills', entry.name, 'SKILL.md');
-    entry.installedSkillSha256 = createHash('sha256').update(edits.get(filename) ?? await readFile(filename)).digest('hex');
-  }
-  edits.set(lockPath, JSON.stringify(lock, null, 2) + '\n');
   if (!options.dryRun) for (const [filename, text] of edits) await writeFile(filename, text);
   console.log(`${options.dryRun ? 'Would initialize' : 'Initialized'} ${next.name}: @${next.scope}, ${next.bundleId} (.development / .preview outside production).`);
 } catch (error) {
