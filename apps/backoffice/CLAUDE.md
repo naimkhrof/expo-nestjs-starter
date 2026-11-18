@@ -8,4 +8,5 @@ Expo web seul (`platforms: ["web"]`, une seule page), Expo Router, Uniwind, TanS
 - Une seule variable, publique : `EXPO_PUBLIC_API_URL`. Les routes appartiennent à NestJS, jamais aux routes Expo.
 - **Mise en ligne** : API et base sur Railway (`.railway/`), back-office sur Cloudflare Workers (`wrangler.jsonc`, job CI `deploy-backoffice`, `pnpm --filter @starter/backoffice deploy` à la main), sauvegardes de la base vers un bucket R2.
   - Un domaine s'ajoute dans `routes` de `wrangler.jsonc` ; la CI lit le secret `CLOUDFLARE_API_TOKEN`, les variables `CLOUDFLARE_ACCOUNT_ID` et `BACKOFFICE_API_URL`.
+  - **Déploiement par la CI, toujours avec un jeton** (pas Workers Builds) : le job attend que la vérification passe. Le jeton se crée à la main, une fois par app, dans Cloudflare › My Profile › API Tokens › modèle « Edit Cloudflare Workers », nommé `GitHub CI <domaine>` ; Account Resources = le compte de l'app, Zone Resources = la zone du domaine. Le porteur le colle lui-même : `gh secret set CLOUDFLARE_API_TOKEN --repo <owner>/<repo>`. Jamais saisi par Claude.
 - Vérifier : `pnpm --filter @starter/backoffice typecheck lint test build`.
