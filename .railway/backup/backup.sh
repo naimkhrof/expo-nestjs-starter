@@ -5,11 +5,12 @@
 set -eu
 
 : "${DATABASE_URL:?DATABASE_URL manquant}"
+# BACKUP_PREFIX (facultatif) : dossier du bucket, pour sauvegarder plusieurs bases au même endroit.
 : "${BACKUP_S3_ENDPOINT:?BACKUP_S3_ENDPOINT manquant}"
 : "${BACKUP_S3_BUCKET:?BACKUP_S3_BUCKET manquant}"
 : "${BACKUP_S3_ACCESS_KEY_ID:?BACKUP_S3_ACCESS_KEY_ID manquant}"
 : "${BACKUP_S3_SECRET_ACCESS_KEY:?BACKUP_S3_SECRET_ACCESS_KEY manquant}"
-KEY="backups/postgres/dump-$(date -u +%Y%m%dT%H%M%SZ).dump"
+KEY="backups/${BACKUP_PREFIX:-postgres}/dump-$(date -u +%Y%m%dT%H%M%SZ).dump"
 
 export RCLONE_CONFIG_S3_TYPE=s3
 export RCLONE_CONFIG_S3_PROVIDER=Other
