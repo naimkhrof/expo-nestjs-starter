@@ -1,5 +1,6 @@
 packages:
   - apps/*
+  - packages/*
 
 # Expo SDK 58 supports isolated dependencies. Each app resolves its own ESLint/Jest.
 nodeLinker: isolated

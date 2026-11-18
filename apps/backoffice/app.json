@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Back-office",
+    "slug": "expo-nestjs-starter-backoffice",
+    "scheme": "expo-nestjs-starter-backoffice",
+    "platforms": ["web"],
+    "web": { "bundler": "metro", "output": "single" },
+    "plugins": ["expo-router"],
+    "experiments": { "typedRoutes": false }
+  }
+}

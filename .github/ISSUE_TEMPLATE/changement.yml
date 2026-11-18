@@ -1,0 +1,23 @@
+name: Changement client
+description: Une demande du client après le gel des US
+labels: [changement]
+body:
+  - type: textarea
+    id: request
+    attributes:
+      label: Demande
+      description: Ce que le client demande, avec la date et le canal (mail, réunion).
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: US touchées ou nouvelles, écrans Claude Design touchés, délai, prix.
+    validations:
+      required: true
+  - type: textarea
+    id: agreement
+    attributes:
+      label: Accord du client
+      description: Date et forme de l'accord. Rien ne change dans les US avant.

@@ -1,32 +1,35 @@
 # Produit
 
-> Une page maximum, mise à jour rarement. Les US et les bugs vivent dans les GitHub Issues, pas ici.
-> Remplacer chaque section ; supprimer celles qui ne servent pas.
+> Une page. Le produit tel qu'il est **aujourd'hui** : on réécrit à l'état nouveau, sans journal. Les US, décisions et changements vivent dans les GitHub Issues.
 
 ## Problème et utilisateurs
 
-Qui a quel problème, et dans quelle situation.
+Qui a quel problème, dans quelle situation. Un paragraphe par profil.
 
 ## Proposition
 
-Ce que l’app apporte, et pourquoi elle est meilleure que les alternatives.
+Ce que l'app apporte, et pourquoi mieux que les alternatives.
 
-## Périmètre v1
+## V1
 
-Les grandes capacités, en quelques lignes. Le détail est dans les issues.
+Les epics de la V1, une ligne chacun. Le détail est dans les issues. Tout le reste porte le label `après-v1`.
 
 ## Hors périmètre
 
-Ce que l’app ne fait pas, volontairement.
+Ce que l'app ne fait pas, volontairement.
 
-## Maquette
+## Design
 
-Lien Figma ou dossier `design/` (exports PNG des écrans).
+Lien Claude Design (design system et planches). C'est la seule référence du design final.
 
-## Contraintes
+## Contraintes et dépendances externes
 
-Données personnelles, légal, plateformes, hors ligne, langues.
+| Dépendance | Qui | Ce qu'il faut | Délai | Sans elle, la V1… |
+| --- | --- | --- | --- | --- |
+| Ex. comptes stores, paiement, hébergement UE, RGPD, droits sur un contenu, validation d'un tiers | | | | |
 
-## Décisions structurantes
+Plateformes, langues, hors ligne, données personnelles.
 
-Une ligne par décision qui change le produit : `AAAA-MM-JJ — décision — raison (#issue)`.
+## Versions envoyées au client
+
+Cahier des charges : dernière version envoyée `cdc-vX` (tag git), date. Voir le skill `backlog`.

@@ -2,9 +2,10 @@ name: CI
 on:
   push:
     branches: [main]
-  pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
+  actions: read
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -12,10 +13,40 @@ jobs:
     env:
       TURBO_TELEMETRY_DISABLED: '1'
       EXPO_NO_TELEMETRY: '1'
+    # À brancher sur un job de déploiement : `needs.verify.outputs.<app> == 'true'`.
+    outputs:
+      mobile: ${{ steps.changes.outputs.mobile }}
+      backoffice: ${{ steps.changes.outputs.backoffice }}
+      api: ${{ steps.changes.outputs.api }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+        with:
+          # Full history: the step below compares this push with the last verified commit of main.
+          fetch-depth: 0
+      - name: Detect changes per app
+        id: changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        # The baseline is the last successful run on main, so a failed or cancelled
+        # run never hides a pending change. A manual run, or an unknown baseline,
+        # reports every app as changed. The mobile app and the back-office also
+        # depend on packages/ui (primitives and tokens).
+        run: |
+          base=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --branch main --event push --status success --limit 1 --json headSha --jq '.[0].headSha // empty' || true)
+          changed() {
+            if [ "$GITHUB_EVENT_NAME" != push ] || [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+              echo true
+            elif git diff --quiet "$base" "$GITHUB_SHA" -- "$@"; then
+              echo false
+            else
+              echo true
+            fi
+          }
+          echo "mobile=$(changed apps/mobile packages/ui)" >> "$GITHUB_OUTPUT"
+          echo "backoffice=$(changed apps/backoffice packages/ui)" >> "$GITHUB_OUTPUT"
+          echo "api=$(changed apps/api)" >> "$GITHUB_OUTPUT"
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
           cache: pnpm
@@ -28,6 +59,8 @@ jobs:
       - run: pnpm build
       - run: pnpm db:up
       - run: pnpm db:migrate
+      # Migrations up and down on a throwaway database.
+      - run: pnpm test:db
       - name: Smoke test API and Swagger
         run: |
           pnpm --filter @starter/api start:prod > /tmp/starter-api.log 2>&1 &

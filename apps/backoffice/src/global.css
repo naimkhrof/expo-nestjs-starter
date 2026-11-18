@@ -1,0 +1,7 @@
+/* Tokens : une seule source, celle de packages/ui. */
+@import 'tailwindcss';
+@import 'uniwind';
+@import '../../../packages/ui/src/tokens.css';
+
+@source '../../../packages/ui/src';
+@source './';

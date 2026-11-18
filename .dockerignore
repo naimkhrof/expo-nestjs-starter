@@ -1,0 +1,12 @@
+# Contexte d'une image de l'API : rien d'autre que ce qu'elle copie, jamais d'environnement local.
+*
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!apps/api
+**/node_modules
+**/dist
+**/.env
+**/.env.*
+**/coverage
+**/*.tsbuildinfo

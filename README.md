@@ -1,6 +1,6 @@
 # Expo + NestJS Starter
 
-Starter réutilisable : **Expo SDK 58 / React Native 0.88 / React 19.3**, Expo Router, Uniwind/Tailwind, composants Obytes, NestJS 11, TypeORM/PostgreSQL, pnpm et Turborepo.
+Starter réutilisable : **Expo SDK 58 / React Native 0.88 / React 19.3**, Expo Router, Uniwind/Tailwind, composants Obytes, back-office Expo web, NestJS 11, TypeORM/PostgreSQL, pnpm et Turborepo.
 
 ## Créer une application
 
@@ -30,7 +30,8 @@ Ce premier build compile et installe le dev client avec MMKV/Nitro, puis démarr
 
 ## Services et mobile
 
-- API : http://localhost:3001 ; Swagger : http://localhost:3001/docs.
+- API : http://localhost:3001 ; Swagger : http://localhost:3001/docs (fermé quand `NODE_ENV=production`).
+- Back-office : `pnpm dev:backoffice`, http://localhost:8090. Connexion avec un compte `admin` de l’API (après `pnpm db:seed` : `admin@example.com`, mot de passe `secret`). L’origine est déjà dans `APP_CORS_ORIGINS` de l’exemple d’environnement de l’API.
 - Metro : port 8081. `pnpm dev:api` et `pnpm dev:mobile` démarrent séparément les apps.
 - `pnpm ios` / `pnpm android` créent le development build local, avec Xcode / Android Studio. **MMKV et Nitro nécessitent un development build** : les commandes mobiles `dev` et `start` ciblent explicitement le dev client.
 - `pnpm web` lance la cible web. Dans `apps/mobile/.env`, utiliser `http://10.0.2.2:3001` sur émulateur Android ou l’adresse LAN de l’ordinateur sur téléphone physique.
@@ -48,13 +49,19 @@ Après une modification des dépendances ou de la configuration native, reconstr
 ## Structure
 
 ```text
-apps/mobile/       Expo Router, composants UI, stockage MMKV, i18n, Axios/Query
-apps/api/          NestJS, auth, fichiers, Swagger, TypeORM et générateurs Hygen
-scripts/           Initialisation, environnements, smoke test
+apps/mobile/       Expo Router, composants UI, stockage MMKV, i18n, Axios/Query ; importe les tokens de design
+apps/api/          NestJS, auth, fichiers, Swagger, TypeORM, limite de débit et générateurs Hygen
+apps/backoffice/   Expo web seul (port 8090) : connexion admin et liste des utilisateurs de l’API
+packages/ui/       @starter/ui : tokens de design et primitives partagées (Button, Input, Text), livrés en sources
+scripts/           Initialisation, environnements, sauvegarde de la base, smoke test
 .claude/skills/    Skills Claude Code : méthode (story, backlog) et guides techniques
-.github/           CI, modèles d’issues (US, bug) et de pull request
+.github/           CI et modèles d’issues (US, bug)
 PRODUCT.md         Fiche produit d’une page
 ```
+
+`apps/mobile/RELEASE.md` est le modèle de la sortie sur les stores (checklist, captures, fiches, confidentialité, EAS) ; `apps/mobile/store/` accueille les fiches.
+
+L’API se règle par variables (`apps/api/.env.example`) : `APP_PUBLIC_SIGNUP=false` ferme l’inscription et la connexion sociale (404), `APP_THROTTLE_LIMIT` / `APP_THROTTLE_TTL_MS` fixent la limite de débit, `APP_TRUST_PROXY` le nombre de mandataires de confiance.
 
 Les scripts d’installation interactifs upstream retirés du projet source ne sont pas réintroduits. Les générateurs Brocoders restent disponibles, avec PostgreSQL comme choix par défaut :
 
@@ -74,10 +81,13 @@ pnpm typecheck
 pnpm lint
 pnpm test
 pnpm build
+pnpm test:db      # migrations montées puis descendues sur une base jetable (base démarrée par pnpm db:up)
 pnpm expo:doctor
 ```
 
-La CI exécute les tests d’initialisation, les contrôles des apps, le build, les migrations sur une base jetable, puis un smoke test de l’API et Swagger. `pnpm build` compile NestJS et exporte les bundles iOS/Android ; il ne compile pas les binaires natifs. Les e2e upstream demandent leurs propres fixtures/services et ne sont pas inclus dans `pnpm test`.
+Sauvegarde de la base de développement : `pnpm db:backup` (fichier compressé dans `~/<slug>-backups`, ou `DB_BACKUP_DIR`), `pnpm db:backup:verify <fichier>` (restaure dans une base jetable et compare le nombre de lignes de chaque table) et `pnpm db:restore <fichier> --force`.
+
+Pas de pull request : un push sur `main` lance la CI. Elle exécute les tests d’initialisation, les contrôles des apps, le build, les migrations, `pnpm test:db`, puis un smoke test de l’API et Swagger ; elle détecte aussi ce qui a changé depuis le dernier run vert de `main` (sorties `mobile`, `backoffice`, `api`, à brancher sur un déploiement) et peut se lancer à la main (`workflow_dispatch`). `pnpm build` compile NestJS et exporte les bundles iOS/Android ; il ne compile pas les binaires natifs. Les e2e upstream demandent leurs propres fixtures/services et ne sont pas inclus dans `pnpm test`.
 
 ## Méthode de travail avec Claude Code
 
@@ -91,12 +101,12 @@ Inspirée des [bonnes pratiques Anthropic](https://code.claude.com/docs/en/best-
 | Vérité durable | Code, tests, migrations, Swagger |
 
 1. **Démarrer** : `/backlog` avec ton cahier des charges ou ta maquette. Claude rédige `PRODUCT.md`, propose les issues (fondations : modèle de données et API d’abord) et ne les crée qu’après ton accord. La source est ensuite gelée.
-2. **Développer** : `/story 12`. Claude lit l’issue, t’interviewe, met l’issue à jour, propose un plan backend → API → écrans, puis code, teste et ouvre une PR `Closes #12` après accord.
+2. **Développer** : `/story 12`. Claude lit l’issue, t’interviewe, met l’issue à jour, propose un plan backend → API → écrans, puis code, teste, fusionne dans `main` et pousse (commit `Closes #12`).
 3. **Changer d’avis** : on modifie l’issue avant le code ; une issue fermée ne se réécrit pas, on en ouvre une nouvelle qui la référence.
 
 ## IA et EAS
 
-Aucun chat ni fournisseur IA n’est livré. Le skill `assistant-ui-native` indique les paquets à ajouter quand une issue en a besoin. Les clés serveur ne doivent jamais entrer dans `EXPO_PUBLIC_*`.
+Aucun chat ni fournisseur IA n’est livré. Les clés serveur ne doivent jamais entrer dans `EXPO_PUBLIC_*`.
 
 Pour EAS, lier votre propre projet depuis `apps/mobile` avec `eas init`, puis configurer vos secrets et profils. Aucun identifiant EAS tiers, signature de distribution ou projet Expo existant n’est lié. Les builds cloud, soumissions et OTA restent des actions distinctes.
 

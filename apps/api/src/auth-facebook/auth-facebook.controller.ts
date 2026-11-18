@@ -5,8 +5,10 @@ import {
   HttpStatus,
   Post,
   SerializeOptions,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { PublicSignupGuard } from '../auth/public-signup.guard';
 import { AuthService } from '../auth/auth.service';
 import { AuthFacebookService } from './auth-facebook.service';
 import { AuthFacebookLoginDto } from './dto/auth-facebook-login.dto';
@@ -30,6 +32,7 @@ export class AuthFacebookController {
     groups: ['me'],
   })
   @Post('login')
+  @UseGuards(PublicSignupGuard)
   @HttpCode(HttpStatus.OK)
   async login(
     @Body() loginDto: AuthFacebookLoginDto,

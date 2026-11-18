@@ -1,5 +1,5 @@
 name: User story
-description: Une fonctionnalité livrable et testable de bout en bout
+description: Un comportement livrable et testable de bout en bout, par un seul profil
 labels: [story]
 body:
   - type: textarea
@@ -12,8 +12,8 @@ body:
   - type: textarea
     id: acceptance
     attributes:
-      label: Critères d’acceptation
-      description: Un critère vérifiable par ligne. Chacun deviendra un test quand c’est possible.
+      label: Critères d'acceptation
+      description: Un critère vérifiable par ligne (Étant donné … quand … alors …). Chacun devient un test quand c'est possible.
       value: |
         - [ ]
     validations:
@@ -22,9 +22,19 @@ body:
     id: design
     attributes:
       label: Maquette
-      description: Lien Figma ou captures glissées ici.
+      description: Planche Claude Design (nom et lien), à créer / à modifier / validée. Aucune pour une US sans écran.
   - type: textarea
-    id: notes
+    id: rules
     attributes:
-      label: Notes
-      description: Règles métier, données, cas limites, hors périmètre.
+      label: Règles métier
+      description: Chiffres, limites, cas particuliers, données et leur durée de vie, hors périmètre.
+  - type: textarea
+    id: questions
+    attributes:
+      label: Questions client
+      description: Ce que les sources ne disent pas (label question-client tant qu'il en reste).
+  - type: input
+    id: source
+    attributes:
+      label: Source
+      description: Version et section du cahier des charges, ou issue de décision (ex. CDC v1.4 §2.1, #42).

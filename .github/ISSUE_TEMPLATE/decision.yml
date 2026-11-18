@@ -1,0 +1,27 @@
+name: Décision
+description: Une décision qui change le produit, le périmètre ou l'architecture
+labels: [decision]
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexte
+      description: Ce qui a provoqué la décision (constat, retour client, erreur).
+    validations:
+      required: true
+  - type: textarea
+    id: decisions
+    attributes:
+      label: Décisions
+      description: Un point par ligne. Pour chacun, l'alternative écartée, l'impact (US, epics, PRODUCT.md) et s'il est réversible.
+      value: |
+        | Question | Décision | Alternative écartée | Impact | Réversible |
+        | --- | --- | --- | --- | --- |
+        |  |  |  |  |  |
+    validations:
+      required: true
+  - type: textarea
+    id: supersedes
+    attributes:
+      label: Ce que cette décision remplace
+      description: Issues et sections de PRODUCT.md réécrites en conséquence.

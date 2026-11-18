@@ -15,6 +15,9 @@
         "EXPO_PUBLIC_*",
         "APP_BUILD_ONLY_VAR",
         "EAS_PROJECT_ID"
+      ],
+      "dependsOn": [
+        "^build"
       ]
     },
     "build": {
@@ -32,15 +35,22 @@
       ]
     },
     "lint": {
+      "dependsOn": [
+        "^build"
+      ],
       "outputs": []
     },
     "typecheck": {
       "dependsOn": [
+        "^build",
         "^typecheck"
       ],
       "outputs": []
     },
     "test": {
+      "dependsOn": [
+        "^build"
+      ],
       "outputs": []
     }
   }

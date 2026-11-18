@@ -1,7 +1,9 @@
 import Env from '@env';
 import { useQuery } from '@tanstack/react-query';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { Button, Text } from '@/components/ui';
 
 export default function HomeScreen() {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -20,10 +22,11 @@ export default function HomeScreen() {
     <SafeAreaView style={{ flex: 1 }}>
       <View className="flex-1 justify-center gap-4 px-6">
         <Text className="text-3xl font-semibold">{Env.EXPO_PUBLIC_NAME}</Text>
-        <Text className="text-base">Socle Expo prêt pour le développement.</Text>
+        <Text>Socle Expo prêt pour le développement.</Text>
         <Text>
           {api.isPending ? 'Connexion à l’API…' : api.isError ? 'API indisponible — démarrer le backend.' : `API connectée : ${api.data.name}`}
         </Text>
+        {api.isError && <Button label="Réessayer" onPress={() => void api.refetch()} />}
       </View>
     </SafeAreaView>
   );

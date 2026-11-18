@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
 import { AuthModule } from './auth/auth.module';
@@ -82,6 +84,16 @@ const infrastructureDatabaseModule = (databaseConfig() as DatabaseConfig)
       imports: [ConfigModule],
       inject: [ConfigService],
     }),
+    // Limite de débit par adresse, réglée par APP_THROTTLE_TTL_MS et APP_THROTTLE_LIMIT.
+    ThrottlerModule.forRootAsync({
+      useFactory: (configService: ConfigService<AllConfigType>) => [
+        {
+          ttl: configService.getOrThrow('app.throttleTtl', { infer: true }),
+          limit: configService.getOrThrow('app.throttleLimit', { infer: true }),
+        },
+      ],
+      inject: [ConfigService],
+    }),
     UsersModule,
     FilesModule,
     AuthModule,
@@ -93,5 +105,6 @@ const infrastructureDatabaseModule = (databaseConfig() as DatabaseConfig)
     MailerModule,
     HomeModule,
   ],
+  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}

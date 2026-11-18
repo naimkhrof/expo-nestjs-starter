@@ -10,7 +10,7 @@ const source = fileURLToPath(new URL('../', import.meta.url));
 async function fixture(t) {
   const root = await mkdtemp(path.join(tmpdir(), 'starter-test-'));
   t.after(() => rm(root, { recursive: true, force: true }));
-  for (const rel of ['starter.config.json', 'package.json', 'compose.yaml', 'CLAUDE.md', 'scripts', '.claude', '.env.example', 'apps/mobile/package.json', 'apps/mobile/.env.example', 'apps/api/package.json', 'apps/api/.env.example']) {
+  for (const rel of ['starter.config.json', 'package.json', 'compose.yaml', 'CLAUDE.md', 'scripts', '.claude', '.env.example', 'apps/mobile/package.json', 'apps/mobile/.env.example', 'apps/api/package.json', 'apps/api/.env.example', 'apps/backoffice/package.json', 'apps/backoffice/app.json', 'apps/backoffice/src/lib/session.ts', 'packages/ui/package.json', 'packages/ui/src']) {
     await mkdir(path.dirname(path.join(root, rel)), { recursive: true });
     await cp(path.join(source, rel), path.join(root, rel), { recursive: true });
   }
@@ -28,6 +28,11 @@ test('initialization renames package filters and native identity consistently, a
   assert.equal((await json(root, 'package.json')).scripts['dev:mobile'], 'pnpm --filter @example/mobile dev');
   assert.equal((await json(root, 'apps/mobile/package.json')).name, '@example/mobile');
   assert.equal((await json(root, 'apps/api/package.json')).name, '@example/api');
+  assert.equal((await json(root, 'apps/backoffice/package.json')).name, '@example/backoffice');
+  assert.equal((await json(root, 'packages/ui/package.json')).name, '@example/ui');
+  assert.equal((await json(root, 'apps/backoffice/package.json')).dependencies['@example/ui'], 'workspace:*');
+  assert.equal((await json(root, 'package.json')).scripts['dev:backoffice'], 'pnpm --filter @example/backoffice dev');
+  assert.equal((await json(root, 'apps/backoffice/app.json')).expo.slug, 'example-app-backoffice');
   assert.match(await readFile(path.join(root, 'compose.yaml'), 'utf8'), /^name: example-app/m);
   assert.equal(run(root, 'init.mjs', options).status, 0);
 });

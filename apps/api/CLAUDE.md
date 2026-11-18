@@ -1,7 +1,30 @@
-# Backend Brocoders
+# API (NestJS 11, Brocoders)
 
-Pour créer une ressource persistée, une relation ou une propriété métier, utiliser le skill `generate` (`/generate`, source unique dans `.claude/skills/generate/` à la racine) avant de générer les fichiers. Ne pas en créer de copie dans cette app. Les templates Hygen (`.hygen/`) et leur configuration (`.hygen.js`) restent dans `apps/api`. Lancer les commandes depuis la racine avec `pnpm --filter @starter/api …` ; PostgreSQL sélectionne la variante `relational`.
+## Architecture
 
-Conserver les modules métier, modèles de domaine, repositories abstraits, implémentations de persistence et mappers de Brocoders. Les recommandations NestJS (`nestjs-best-practices`) complètent cette architecture ; elles ne la remplacent pas. Pour un endpoint sans nouvelle persistence, ne pas générer une entité inutile.
+- **Ressource exposée en CRUD HTTP** : skill `generate` (variante `relational`), puis `nestjs-best-practices`.
+  - Les templates Hygen restent dans `apps/api` (`.hygen/`, `.hygen.js`) ; ne pas copier le skill ici.
+  - Conserver les modules, domaines, repositories, persistences et mappers de Brocoders.
+  - Pas d'entité inutile pour un endpoint sans persistence.
+- Un exemple `POST(Request)` destiné à Next.js ou Expo se traduit vers NestJS, avec le routage et la validation existants. Les controllers HTTP restent ici.
+- **Où contrôler** : ce que la base peut tenir seule est une contrainte SQL ; ce qui croise plusieurs tables se contrôle dans le service.
 
-Les controllers HTTP restent dans cette app. Un exemple `POST(Request)` destiné à Next.js/Expo doit être traduit vers NestJS, avec les conventions de routage existantes et la validation adaptée.
+## Base et migrations
+
+- `pnpm db:up`, `pnpm db:migrate`. Les migrations vivent dans `src/database/migrations`.
+- `migration:generate` ne compare pas les `CHECK` : les écrire à la main dans la migration.
+- `env-cmd` écrase les variables du shell sans `--no-override` : pour viser une autre base, l'ajouter (`env-cmd --no-override -- …`) ou donner `DATABASE_URL` en entier.
+- **Sauvegardes**, hors du dépôt (`~/<slug>-backups` ou `DB_BACKUP_DIR`) : `pnpm db:backup`, `pnpm db:backup:verify <fichier>` (base jetable), `pnpm db:restore <fichier> --force`.
+
+## Sécurité et configuration
+
+- Limite de débit globale (`@nestjs/throttler`, `app.module.ts`) : `APP_THROTTLE_LIMIT`, `APP_THROTTLE_TTL_MS`. Une route sensible la resserre avec `@Throttle`.
+- Derrière un mandataire (hébergeur), régler `APP_TRUST_PROXY` : sans lui, tous les clients comptent sous une seule adresse.
+- `APP_PUBLIC_SIGNUP=false` : l'inscription par e-mail et les connexions sociales répondent 404 (`PublicSignupGuard`).
+- Swagger (`/docs`) n'est pas servi quand `NODE_ENV=production`.
+- Un nouveau front (`apps/backoffice`, web) ajoute son origine à `APP_CORS_ORIGINS`.
+
+## Tests
+
+- **Unitaires** : `pnpm test`. **E2e** : `test/**/*.e2e-spec.ts`, API lancée à part.
+- **Base** : `pnpm test:db` (`test/db/*.db-spec.ts`) sur une base jetable créée à côté de celle de travail, détruite à la fin. `migrations.db-spec.ts` monte puis descend toutes les migrations. Les contraintes SQL propres à l'app s'y testent aussi (`createTempDatabase`).

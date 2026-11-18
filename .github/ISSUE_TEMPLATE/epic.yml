@@ -1,0 +1,29 @@
+name: Epic
+description: Un ensemble d'US livré dans l'ordre, par packs de session
+labels: [epic]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Objectif
+      description: Deux lignes. Section du cahier des charges.
+    validations:
+      required: true
+  - type: textarea
+    id: depends
+    attributes:
+      label: Dépend de
+  - type: textarea
+    id: packs
+    attributes:
+      label: Packs de session
+      description: Les US de chaque session, dans l'ordre (mêmes fichiers ou même validation).
+  - type: textarea
+    id: contracts
+    attributes:
+      label: Contrats
+      description: Schémas, endpoints, figés au démarrage de l'epic.
+  - type: textarea
+    id: out
+    attributes:
+      label: Hors périmètre

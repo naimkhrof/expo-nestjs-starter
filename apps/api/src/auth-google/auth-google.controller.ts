@@ -5,8 +5,10 @@ import {
   HttpStatus,
   Post,
   SerializeOptions,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { PublicSignupGuard } from '../auth/public-signup.guard';
 import { AuthService } from '../auth/auth.service';
 import { AuthGoogleService } from './auth-google.service';
 import { AuthGoogleLoginDto } from './dto/auth-google-login.dto';
@@ -30,6 +32,7 @@ export class AuthGoogleController {
     groups: ['me'],
   })
   @Post('login')
+  @UseGuards(PublicSignupGuard)
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: AuthGoogleLoginDto): Promise<LoginResponseDto> {
     const socialData = await this.authGoogleService.getProfileByToken(loginDto);

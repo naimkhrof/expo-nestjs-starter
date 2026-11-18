@@ -5,8 +5,10 @@ import {
   HttpStatus,
   Post,
   SerializeOptions,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { PublicSignupGuard } from '../auth/public-signup.guard';
 import { AuthService } from '../auth/auth.service';
 import { AuthAppleService } from './auth-apple.service';
 import { AuthAppleLoginDto } from './dto/auth-apple-login.dto';
@@ -30,6 +32,7 @@ export class AuthAppleController {
     groups: ['me'],
   })
   @Post('login')
+  @UseGuards(PublicSignupGuard)
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: AuthAppleLoginDto): Promise<LoginResponseDto> {
     const socialData = await this.authAppleService.getProfileByToken(loginDto);

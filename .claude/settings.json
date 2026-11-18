@@ -7,19 +7,32 @@
       "Bash(pnpm test:*)",
       "Bash(pnpm build:*)",
       "Bash(pnpm expo:doctor:*)",
+      "Bash(pnpm product:export:*)",
       "Bash(pnpm --filter:*)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
+      "Bash(git switch:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git merge --no-ff:*)",
+      "Bash(git pull --ff-only:*)",
+      "Bash(git branch -d:*)",
+      "Bash(git push origin main)",
       "Bash(gh issue view:*)",
       "Bash(gh issue list:*)",
-      "Bash(gh pr view:*)",
-      "Bash(gh pr list:*)",
-      "Bash(gh pr checks:*)"
+      "Bash(gh issue edit:*)",
+      "Bash(gh issue comment:*)"
     ],
     "deny": [
       "Read(./.env)",
-      "Read(./apps/*/.env)"
+      "Read(./apps/*/.env)",
+      "Bash(gh pr create:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)"
     ]
+  },
+  "enabledPlugins": {
+    "expo@claude-plugins-official": true
   }
 }

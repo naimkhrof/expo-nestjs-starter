@@ -9,6 +9,10 @@ import Env from './env';
 import starter from '../../starter.config.json';
 
 
+// Identifiant du projet EAS (public) : le coller ici après `eas init` (voir RELEASE.md).
+// Tant qu'il est vide, EAS Update est éteint.
+const EAS_PROJECT_ID = '';
+
 const appIconBadgeConfig: AppIconBadgeConfig = {
   enabled: Env.EXPO_PUBLIC_APP_ENV !== 'production',
   badges: [
@@ -37,7 +41,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   userInterfaceStyle: 'automatic',
   updates: {
     fallbackToCacheTimeout: 0,
+    ...(EAS_PROJECT_ID ? { url: `https://u.expo.dev/${EAS_PROJECT_ID}` } : {}),
   },
+  ...(EAS_PROJECT_ID ? { runtimeVersion: { policy: 'appVersion' as const }, extra: { ...config.extra, eas: { projectId: EAS_PROJECT_ID } } } : {}),
   ios: {
     supportsTablet: true,
     bundleIdentifier: Env.EXPO_PUBLIC_BUNDLE_ID,

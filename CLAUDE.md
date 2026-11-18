@@ -1,30 +1,58 @@
 # Expo + NestJS starter
 
-Monorepo pnpm/Turborepo : `apps/mobile` (Expo SDK 58, Expo Router, Uniwind, composants Obytes) et `apps/api` (NestJS 11, Brocoders, PostgreSQL/TypeORM). Chaque app a son `CLAUDE.md`.
+Monorepo pnpm/Turborepo :
+- `apps/mobile` : Expo SDK 58, Expo Router, Uniwind.
+- `apps/backoffice` : back-office admin, Expo web seul.
+- `apps/api` : NestJS 11 Brocoders, PostgreSQL/TypeORM.
+- `packages/ui` : tokens et primitives partagés, livrés en sources.
+
+Chaque app a son `CLAUDE.md`, chargé quand on y travaille.
+
+## Où vit l'information
+
+Chaque information vit à un seul endroit ; on la réécrit à l'état nouveau, sans amendement.
+- **Produit** (pour qui, V1, contraintes, dépendances externes) : `PRODUCT.md`, une page.
+- **Backlog, US, bugs, décisions, changements client** : GitHub Issues via `gh`, seule source. Skill `backlog`.
+- **Interface** : Claude Design, seule référence du design final (lien dans `PRODUCT.md`). Skill `story` pour développer.
+- **Sortie** : `apps/mobile/RELEASE.md`. **Licences** : `THIRD_PARTY.md`.
+- Pas de `docs/`, PRD ni spec à côté du code : la vérité durable est le code, ses tests et ses migrations. Les documents client (cahier des charges, devis, contrat) restent hors du dépôt.
 
 ## Méthode
 
-- Produit : `PRODUCT.md`. Backlog, US et bugs : **GitHub Issues** via `gh`, seule source. Pas de `docs/`, PRD ou spec maintenus à côté du code : la vérité durable est le code, ses tests et ses migrations.
-- Développer une issue : skill `story`. Créer, découper ou modifier le backlog : skill `backlog`.
-- Backend d'abord : modèle de données → API et tests → écrans.
+- Cadrage avant tout code : `PRODUCT.md` validé, dépendances externes listées, V1 figée, revue à froid (skill `backlog`).
+- Un epic à la fois ; un pack d'US = une session (`/story epic <n> [pack <k>]`). Le label `après-v1` n'est jamais lancé avant la sortie.
+- Backend d'abord : données, puis API et tests, puis écrans.
 - L'issue est mise à jour avant le code. Une issue fermée ne se réécrit pas : on en ouvre une nouvelle.
+
+## Design
+
+- Pré-maquettes (démo web, croquis, prototypes) : pour discuter avec le client, jamais une référence de code.
+- Le design final vit dans Claude Design : design system (tokens, typographie, composants) puis une planche par écran. Les tokens de `packages/ui` en sont la copie dans le code.
+- Une planche est **éditée en place** avant le code, adaptée à l'US, et validée. Ni copie, ni planche par US, ni US « Maquette ». On garde l'état d'origine avant d'éditer.
+- Aucun écran codé sans planche validée. La conformité se vérifie à chaque US (captures iOS et Android en regard de la planche), pas par un audit final.
+
+## Interdits
+
+- **Rien d'inventé** : une règle métier, un texte ou un chiffre absent des sources est une question au client.
+- **Aucun code sans appelant** ajouté « pour plus tard », aucune table ni colonne sans lecteur, aucune dépendance sans importeur.
+- Les endpoints appartiennent à NestJS, jamais aux routes Expo.
+- **Aucun secret** : ni `.env`, ni clé de signature, ni identifiant EAS dans le dépôt ; aucune clé serveur dans `EXPO_PUBLIC_*`.
 
 ## Commandes
 
-- Vérifier : `pnpm typecheck`, `pnpm lint`, `pnpm test` ; `pnpm build` exporte les bundles et compile l'API (ni build natif, ni publication) ; `pnpm expo:doctor`.
-- Une app : `pnpm --filter @starter/mobile …` ou `pnpm --filter @starter/api …`.
-- Base : `pnpm db:up`, `pnpm db:migrate`. Starter : `pnpm test:starter`.
+- **Vérifier** : `pnpm typecheck`, `pnpm lint`, `pnpm test` ; `pnpm test:db` (migrations sur base jetable) ; `pnpm build` (bundles et API, sans build natif) ; `pnpm expo:doctor`.
+- **Une app** : `pnpm --filter @starter/{mobile,api,backoffice} …`.
+- **Base** : `pnpm db:up`, `pnpm db:migrate`, `pnpm db:backup`. **Produit** : `pnpm product:export`. **Starter** : `pnpm test:starter`.
 
 ## Conventions
 
-- Nouvelle persistance : skill `generate` (variante relational), puis `nestjs-best-practices`. Conserver domaines, repositories et mappers Brocoders.
-- Les endpoints appartiennent à NestJS, jamais aux routes Expo.
-- Réutiliser les primitives `apps/mobile/src/components/ui`, les tokens `src/global.css` et le client Axios/TanStack Query.
-- Une nouvelle dépendance se justifie dans le plan, avec ce que le starter fournit déjà.
+- Nouvelle persistance : skill `generate` (relational), puis `nestjs-best-practices`. Garder domaines, repositories et mappers Brocoders.
+- Réutiliser `packages/ui`, les tokens et le client Axios/TanStack Query. Une nouvelle dépendance se justifie dans le plan.
+- Toute chaîne visible dans chaque fichier de langue, mêmes clés (vérifié par un test). Tester chaque langue et iOS **et** Android dès le premier écran.
 
 ## Pièges
 
 - MMKV/Nitro exigent un development build : Expo Go ne fonctionne pas.
-- `pnpm starter:init` doit précéder `pnpm setup:env` ; il refuse de changer l'identité après la création des `.env`.
-- Ne jamais publier `.env`, clés de signature ou identifiants EAS. Aucune clé serveur dans `EXPO_PUBLIC_*`.
+- `pnpm starter:init` doit précéder `pnpm setup:env`.
+- Un push sur `main` lance la CI.
 - Vérifications web : navigateur intégré de l'app Claude ; fermer les onglets temporaires.

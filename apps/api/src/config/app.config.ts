@@ -2,6 +2,7 @@ import { registerAs } from '@nestjs/config';
 import { AppConfig } from './app-config.type';
 import validateConfig from '.././utils/validate-config';
 import {
+  IsBooleanString,
   IsEnum,
   IsInt,
   IsOptional,
@@ -51,6 +52,25 @@ class EnvironmentVariablesValidator {
   @IsString()
   @IsOptional()
   APP_HEADER_LANGUAGE: string;
+
+  @IsInt()
+  @Min(0)
+  @IsOptional()
+  APP_TRUST_PROXY: number;
+
+  @IsBooleanString()
+  @IsOptional()
+  APP_PUBLIC_SIGNUP: string;
+
+  @IsInt()
+  @Min(1)
+  @IsOptional()
+  APP_THROTTLE_TTL_MS: number;
+
+  @IsInt()
+  @Min(1)
+  @IsOptional()
+  APP_THROTTLE_LIMIT: number;
 }
 
 export default registerAs<AppConfig>('app', () => {
@@ -78,5 +98,20 @@ export default registerAs<AppConfig>('app', () => {
     apiPrefix: process.env.API_PREFIX || 'api',
     fallbackLanguage: process.env.APP_FALLBACK_LANGUAGE || 'en',
     headerLanguage: process.env.APP_HEADER_LANGUAGE || 'x-custom-lang',
+    // Derrière le mandataire de l'hébergeur, l'adresse du client est celle
+    // qu'il transmet : sans lui faire confiance, la limite de débit compterait
+    // tout le monde sous une seule adresse.
+    trustProxy: process.env.APP_TRUST_PROXY
+      ? parseInt(process.env.APP_TRUST_PROXY, 10)
+      : process.env.NODE_ENV === 'production'
+        ? 1
+        : 0,
+    publicSignup: process.env.APP_PUBLIC_SIGNUP !== 'false',
+    throttleTtl: process.env.APP_THROTTLE_TTL_MS
+      ? parseInt(process.env.APP_THROTTLE_TTL_MS, 10)
+      : 60_000,
+    throttleLimit: process.env.APP_THROTTLE_LIMIT
+      ? parseInt(process.env.APP_THROTTLE_LIMIT, 10)
+      : 100,
   };
 });

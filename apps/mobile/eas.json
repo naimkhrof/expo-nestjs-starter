@@ -1,5 +1,6 @@
 {
   "cli": {
+    "version": ">= 18.0.0",
     "appVersionSource": "remote"
   },
   "build": {
@@ -21,8 +22,7 @@
     },
     "preview": {
       "channel": "preview",
-      "autoIncrement": true,
-      "distribution": "store",
+      "distribution": "internal",
       "ios": {
         "image": "latest"
       },
@@ -43,28 +43,27 @@
         "image": "latest"
       },
       "android": {
-        "image": "latest"
+        "image": "latest",
+        "buildType": "apk"
       },
       "env": {
         "EXPO_PUBLIC_APP_ENV": "development"
       }
     },
     "simulator": {
-      "environment": "development",
+      "extends": "development",
       "ios": {
         "simulator": true,
         "image": "latest"
-      },
-      "android": {
-        "image": "latest"
-      },
-      "env": {
-        "EXPO_PUBLIC_APP_ENV": "development"
       }
     }
   },
   "submit": {
-    "preview": {},
-    "production": {}
+    "production": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "draft"
+      }
+    }
   }
 }
