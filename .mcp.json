@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "cloudflare": {
+      "type": "http",
+      "url": "https://mcp.cloudflare.com/mcp",
+      "alwaysLoad": false
+    },
+    "railway": {
+      "type": "http",
+      "url": "https://mcp.railway.com",
+      "alwaysLoad": false
+    }
+  }
+}

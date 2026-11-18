@@ -56,3 +56,4 @@ Chaque information vit à un seul endroit ; on la réécrit à l'état nouveau, 
 - `pnpm starter:init` doit précéder `pnpm setup:env`.
 - Un push sur `main` lance la CI.
 - Vérifications web : navigateur intégré de l'app Claude ; fermer les onglets temporaires.
+- Cloudflare (DNS, R2, Workers) et Railway : MCP `cloudflare` et `railway` du projet (`.mcp.json`, OAuth, chargés à la demande), jamais le tableau de bord dans le navigateur. Les clés d'accès (R2, jetons d'API) se créent à la main.
