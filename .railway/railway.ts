@@ -58,9 +58,8 @@ export default defineRailway(() => {
       drainingSeconds: 15,
     },
     replicas: { [REGION]: 1 },
-    // Domaine : une fois choisi, l'ajouter ici (`{ domain: "api.example.com", port: 8080 }`),
-    // puis renseigner BACKEND_DOMAIN, FRONTEND_DOMAIN et APP_CORS_ORIGINS ci-dessous.
-    domains: [],
+    // Domaine : à ajouter dans le tableau de bord Railway (le code ne peut pas l'enregistrer),
+    // puis `railway config pull` ; renseigner BACKEND_DOMAIN, FRONTEND_DOMAIN et APP_CORS_ORIGINS.
     env: {
       NODE_ENV: "production",
       PORT: "8080",
