@@ -7,7 +7,6 @@
       "Bash(pnpm test:*)",
       "Bash(pnpm build:*)",
       "Bash(pnpm expo:doctor:*)",
-      "Bash(pnpm product:export:*)",
       "Bash(pnpm --filter:*)",
       "Bash(git status:*)",
       "Bash(git diff:*)",

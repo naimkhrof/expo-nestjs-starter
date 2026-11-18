@@ -29,7 +29,3 @@ Lien Claude Design (design system et planches). C'est la seule référence du de
 | Ex. comptes stores, paiement, hébergement UE, RGPD, droits sur un contenu, validation d'un tiers | | | | |
 
 Plateformes, langues, hors ligne, données personnelles.
-
-## Versions envoyées au client
-
-Cahier des charges : dernière version envoyée `cdc-vX` (tag git), date. Voir le skill `backlog`.

@@ -33,8 +33,3 @@ body:
     attributes:
       label: Questions client
       description: Ce que les sources ne disent pas (label question-client tant qu'il en reste).
-  - type: input
-    id: source
-    attributes:
-      label: Source
-      description: Version et section du cahier des charges, ou issue de décision (ex. CDC v1.4 §2.1, #42).

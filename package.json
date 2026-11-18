@@ -31,8 +31,7 @@
     "setup:env": "node scripts/setup.mjs",
     "expo:doctor": "pnpm --filter @starter/mobile run doctor",
     "starter:init": "node scripts/init.mjs",
-    "test:starter": "node --test scripts/starter.test.mjs",
-    "product:export": "node scripts/product-export.mjs"
+    "test:starter": "node --test scripts/starter.test.mjs"
   },
   "devDependencies": {
     "turbo": "2.11.10"

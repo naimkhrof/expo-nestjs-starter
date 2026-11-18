@@ -42,7 +42,7 @@ Chaque information vit à un seul endroit ; on la réécrit à l'état nouveau, 
 
 - **Vérifier** : `pnpm typecheck`, `pnpm lint`, `pnpm test` ; `pnpm test:db` (migrations sur base jetable) ; `pnpm build` (bundles et API, sans build natif) ; `pnpm expo:doctor`.
 - **Une app** : `pnpm --filter @starter/{mobile,api,backoffice} …`.
-- **Base** : `pnpm db:up`, `pnpm db:migrate`, `pnpm db:backup`. **Produit** : `pnpm product:export`. **Starter** : `pnpm test:starter`.
+- **Base** : `pnpm db:up`, `pnpm db:migrate`, `pnpm db:backup`. **Starter** : `pnpm test:starter`.
 
 ## Conventions
 

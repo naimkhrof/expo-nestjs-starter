@@ -6,7 +6,7 @@ body:
     id: goal
     attributes:
       label: Objectif
-      description: Deux lignes. Section du cahier des charges.
+      description: Deux lignes.
     validations:
       required: true
   - type: textarea
