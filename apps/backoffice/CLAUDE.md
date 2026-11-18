@@ -6,4 +6,6 @@ Expo web seul (`platforms: ["web"]`, une seule page), Expo Router, Uniwind, TanS
 - Tokens : `src/global.css` importe `packages/ui/src/tokens.css`, seule source. Primitives : `@starter/ui` (`packages/ui`) ; n'y extraire du mobile que ce que le back-office utilise.
 - Français seul : tous les textes dans `src/texts.ts`.
 - Une seule variable, publique : `EXPO_PUBLIC_API_URL`. Les routes appartiennent à NestJS, jamais aux routes Expo.
+- **Mise en ligne** : API et base sur Railway (`.railway/`), back-office sur Cloudflare Workers (`wrangler.jsonc`, job CI `deploy-backoffice`, `pnpm --filter @starter/backoffice deploy` à la main), sauvegardes de la base vers un bucket R2.
+  - Un domaine s'ajoute dans `routes` de `wrangler.jsonc` ; la CI lit le secret `CLOUDFLARE_API_TOKEN`, les variables `CLOUDFLARE_ACCOUNT_ID` et `BACKOFFICE_API_URL`.
 - Vérifier : `pnpm --filter @starter/backoffice typecheck lint test build`.

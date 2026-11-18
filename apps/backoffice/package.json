@@ -9,7 +9,8 @@
     "build": "expo export --platform web --output-dir dist",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src metro.config.js",
-    "test": "jest --runInBand --watchman=false --forceExit"
+    "test": "jest --runInBand --watchman=false --forceExit",
+    "deploy": "pnpm build && wrangler deploy"
   },
   "dependencies": {
     "@expo/metro-runtime": "~58.0.16",
@@ -40,6 +41,7 @@
     "jest": "^30.5.2",
     "jest-expo": "~58.0.13",
     "tailwindcss": "4.1.18",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "wrangler": "4.85.0"
   }
 }

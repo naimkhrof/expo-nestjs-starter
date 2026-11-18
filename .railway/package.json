@@ -1,0 +1,9 @@
+{
+  "name": "starter-railway",
+  "private": true,
+  "description": "SDK de Railway pour .railway/railway.ts (railway config plan / apply), hors workspace pnpm.",
+  "devDependencies": {
+    "@types/node": "25.5.0",
+    "railway": "3.17.0"
+  }
+}
