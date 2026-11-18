@@ -10,7 +10,7 @@ const source = fileURLToPath(new URL('../', import.meta.url));
 async function fixture(t) {
   const root = await mkdtemp(path.join(tmpdir(), 'starter-test-'));
   t.after(() => rm(root, { recursive: true, force: true }));
-  for (const rel of ['starter.config.json', 'package.json', 'compose.yaml', 'CLAUDE.md', 'scripts', '.claude', '.env.example', 'apps/mobile/package.json', 'apps/mobile/.env.example', 'apps/api/package.json', 'apps/api/.env.example', 'apps/backoffice/package.json', 'apps/backoffice/app.json', 'apps/backoffice/src/lib/session.ts', 'packages/ui/package.json', 'packages/ui/src']) {
+  for (const rel of ['starter.config.json', 'package.json', 'compose.yaml', 'CLAUDE.md', 'scripts', '.claude', '.env.example', 'apps/mobile/package.json', 'apps/mobile/.env.example', 'apps/api/package.json', 'apps/api/.env.example', 'apps/api/Dockerfile', 'apps/backoffice/wrangler.jsonc', 'apps/api/CLAUDE.md', '.railway/railway.ts', '.railway/README.md', 'apps/backoffice/package.json', 'apps/backoffice/app.json', 'apps/backoffice/src/lib/session.ts', 'packages/ui/package.json', 'packages/ui/src']) {
     await mkdir(path.dirname(path.join(root, rel)), { recursive: true });
     await cp(path.join(source, rel), path.join(root, rel), { recursive: true });
   }
@@ -35,6 +35,19 @@ test('initialization renames package filters and native identity consistently, a
   assert.equal((await json(root, 'apps/backoffice/app.json')).expo.slug, 'example-app-backoffice');
   assert.match(await readFile(path.join(root, 'compose.yaml'), 'utf8'), /^name: example-app/m);
   assert.equal(run(root, 'init.mjs', options).status, 0);
+});
+
+test('initialization renames the scope in the API Dockerfile and keeps the Railway project tied to starter.config.json', async (t) => {
+  const root = await fixture(t);
+  assert.equal(run(root, 'init.mjs', options).status, 0);
+  const dockerfile = await readFile(path.join(root, 'apps/api/Dockerfile'), 'utf8');
+  assert.match(dockerfile, /--filter "@example\/api\.\.\."/);
+  assert.doesNotMatch(dockerfile, /@starter\//);
+  const railway = await readFile(path.join(root, '.railway/railway.ts'), 'utf8');
+  assert.doesNotMatch(railway, /@starter\//);
+  assert.match(railway, /starter\.config\.json/);
+  assert.equal((await json(root, 'starter.config.json')).slug, 'example-app');
+  assert.match(await readFile(path.join(root, 'apps/backoffice/wrangler.jsonc'), 'utf8'), /"name": "example-app-backoffice"/);
 });
 
 test('invalid identity and dry-run never change the project', async (t) => {

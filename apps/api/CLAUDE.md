@@ -28,3 +28,12 @@
 
 - **Unitaires** : `pnpm test`. **E2e** : `test/**/*.e2e-spec.ts`, API lancée à part.
 - **Base** : `pnpm test:db` (`test/db/*.db-spec.ts`) sur une base jetable créée à côté de celle de travail, détruite à la fin. `migrations.db-spec.ts` monte puis descend toutes les migrations. Les contraintes SQL propres à l'app s'y testent aussi (`createTempDatabase`).
+
+## Mise en ligne (Railway)
+
+- **Configuration en code** : `.railway/railway.ts` (README du dossier). `cd .railway && pnpm install --ignore-workspace`, `railway config plan`, puis `railway config apply`. Sur un projet existant, `railway config pull` d'abord.
+- **Services** : `Postgres` (volume), `api` (`apps/api/Dockerfile`, déployé après une CI verte, migrations en pré-déploiement), `backup` (chaque jour à 3 h UTC, `pg_dump` vers un bucket S3 compatible, `backups/postgres/` ; règle d'expiration à poser sur le bucket).
+- **Domaines** : à ajouter dans `railway.ts` avec `BACKEND_DOMAIN`, `FRONTEND_DOMAIN`, `APP_CORS_ORIGINS`. Swagger n'est pas servi en production.
+- **Secrets** : `AUTH_*_SECRET` et `BACKUP_S3_*` restent chez Railway (`preserve()`), jamais dans le dépôt.
+- **Restaurer une sauvegarde** : `railway tcp-proxy create -s Postgres --port 5432`, puis `pg_restore --no-owner --no-acl -j 4` dans une base vide, puis supprimer le proxy.
+- **Commande ponctuelle sur la production** : `railway run --service api -- …`, avec `DATABASE_URL` pointée sur le proxy.

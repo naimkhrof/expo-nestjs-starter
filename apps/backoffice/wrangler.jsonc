@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Back-office (Expo web, une seule page) servi en fichiers statiques.
+  // `name` est posé par `pnpm starter:init` (`<slug>-backoffice`).
+  "name": "expo-nestjs-starter-backoffice",
+  "compatibility_date": "2026-11-06",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  },
+  // Aucun domaine par défaut : le Worker n'est pas servi tant qu'on n'en ajoute pas un, par exemple
+  // "routes": [{ "pattern": "admin.example.com", "custom_domain": true }]
+  // (le domaine doit être une zone du compte Cloudflare). L'ajouter aussi à APP_CORS_ORIGINS de l'API.
+  "workers_dev": false,
+  "preview_urls": false
+}

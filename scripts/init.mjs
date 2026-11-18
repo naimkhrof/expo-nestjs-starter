@@ -63,8 +63,8 @@ try {
     json.name = rel === 'package.json' ? next.slug : `@${next.scope}/${rel.split('/')[1]}`;
     edits.set(filename, JSON.stringify(json, null, 2) + '\n');
   }
-  // Identité propre au back-office : identifiant Expo et clé de session (même origine localhost:8090 d'un projet à l'autre).
-  for (const rel of ['apps/backoffice/app.json', 'apps/backoffice/src/lib/session.ts']) {
+  // Identité propre au back-office : identifiant Expo, clé de session et nom du Worker Cloudflare (même origine localhost:8090 d'un projet à l'autre).
+  for (const rel of ['apps/backoffice/app.json', 'apps/backoffice/src/lib/session.ts', 'apps/backoffice/wrangler.jsonc']) {
     const filename = path.join(root, rel);
     const text = edits.get(filename) ?? await readFile(filename, 'utf8');
     edits.set(filename, text.replaceAll(`${previous.slug}-backoffice`, `${next.slug}-backoffice`));

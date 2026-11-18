@@ -13,7 +13,7 @@ jobs:
     env:
       TURBO_TELEMETRY_DISABLED: '1'
       EXPO_NO_TELEMETRY: '1'
-    # À brancher sur un job de déploiement : `needs.verify.outputs.<app> == 'true'`.
+    # Brancher un job de déploiement avec `needs.verify.outputs.<app> == 'true'` (voir deploy-backoffice).
     outputs:
       mobile: ${{ steps.changes.outputs.mobile }}
       backoffice: ${{ steps.changes.outputs.backoffice }}
@@ -68,3 +68,72 @@ jobs:
       - name: Stop development database
         if: always()
         run: docker compose down
+
+  # CD : une fois main vérifiée, le back-office (Expo web) part sur Cloudflare Workers, seulement
+  # s'il a changé depuis le dernier run vert ; un run manuel déploie toujours. Il faut le secret
+  # CLOUDFLARE_API_TOKEN et les variables CLOUDFLARE_ACCOUNT_ID et BACKOFFICE_API_URL (URL de
+  # l'API) ; sans eux, le job est sauté avec un avertissement. L'API se déploie seule : Railway
+  # construit apps/api/Dockerfile après une CI verte.
+  deploy-backoffice:
+    needs: verify
+    if: github.ref == 'refs/heads/main' && needs.verify.outputs.backoffice == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: deploy-backoffice
+      cancel-in-progress: false
+    env:
+      TURBO_TELEMETRY_DISABLED: '1'
+      EXPO_NO_TELEMETRY: '1'
+      EXPO_PUBLIC_API_URL: ${{ vars.BACKOFFICE_API_URL }}
+      CLOUDFLARE_API_TOKEN_RAW: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Check Cloudflare credentials
+        id: credentials
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN_RAW" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ] || [ -z "$EXPO_PUBLIC_API_URL" ]; then
+            echo "::warning::CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID or BACKOFFICE_API_URL missing: back-office deploy skipped."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.credentials.outputs.ready == 'true'
+        uses: actions/checkout@v5
+      - if: steps.credentials.outputs.ready == 'true'
+        uses: pnpm/action-setup@v4
+      - if: steps.credentials.outputs.ready == 'true'
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - if: steps.credentials.outputs.ready == 'true'
+        run: pnpm install --frozen-lockfile
+      - if: steps.credentials.outputs.ready == 'true'
+        name: Clean and verify the Cloudflare API token
+        # The stored secret may carry spaces, quotes or a "Bearer " prefix, which wrangler
+        # rejects. Clean it, then check it is an active API token.
+        run: |
+          token=$(printf '%s' "$CLOUDFLARE_API_TOKEN_RAW" | tr -d "[:space:]\"'")
+          token=${token#Bearer}
+          echo "::add-mask::$token"
+          for url in \
+            "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/tokens/verify" \
+            "https://api.cloudflare.com/client/v4/user/tokens/verify"; do
+            body=$(curl -s -H "Authorization: Bearer $token" "$url")
+            if echo "$body" | grep -q '"status":"active"'; then
+              echo "Cloudflare API token active."
+              echo "CLOUDFLARE_API_TOKEN=$token" >> "$GITHUB_ENV"
+              exit 0
+            fi
+          done
+          echo "Cloudflare answered: $body"
+          echo "::error::CLOUDFLARE_API_TOKEN is not an active Cloudflare API token (template 'Edit Cloudflare Workers')."
+          exit 1
+      - if: steps.credentials.outputs.ready == 'true'
+        name: Build the back-office
+        run: pnpm --filter @starter/backoffice build
+      - if: steps.credentials.outputs.ready == 'true'
+        name: Deploy to Cloudflare Workers
+        working-directory: apps/backoffice
+        run: pnpm exec wrangler deploy
