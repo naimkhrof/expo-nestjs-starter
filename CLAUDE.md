@@ -13,21 +13,22 @@ Chaque app a son `CLAUDE.md`, chargé quand on y travaille.
 Chaque information vit à un seul endroit ; on la réécrit à l'état nouveau, sans amendement.
 - **Produit** (pour qui, V1, contraintes, dépendances externes) : `PRODUCT.md`, une page.
 - **Backlog, US, bugs, décisions, changements client** : GitHub Issues via `gh`, seule source. Skill `backlog`.
-- **Interface** : Claude Design, seule référence du design final (lien dans `PRODUCT.md`). Skill `story` pour développer.
+- **Interface** : un seul document Claude Design (planche « Design system » puis une planche par écran), seule référence du design final ; lien dans `PRODUCT.md`. Skill `story` pour développer.
 - **Sortie** : `apps/mobile/RELEASE.md`. **Licences** : `THIRD_PARTY.md`.
-- Pas de `docs/`, PRD ni spec à côté du code : la vérité durable est le code, ses tests et ses migrations. Les documents client (cahier des charges, devis, contrat) restent hors du dépôt.
+- Pas de `docs/`, PRD ni spec à côté du code : la vérité durable est le code, ses tests et ses migrations. Le cahier des charges client est généré depuis `PRODUCT.md` et les issues (skill `backlog`) ; le document signé, le devis et le contrat restent hors du dépôt.
 
 ## Méthode
 
-- Cadrage avant tout code : `PRODUCT.md` validé, dépendances externes listées, V1 figée, revue à froid (skill `backlog`).
+- Cadrage avant tout code (skill `backlog`) : `PRODUCT.md`, dépendances externes, epics et US, démo dans Claude Design, cahier des charges généré et signé, V1 figée, revue à froid.
 - Un epic à la fois ; un pack d'US = une session (`/story epic <n> [pack <k>]`). Le label `après-v1` n'est jamais lancé avant la sortie.
 - Backend d'abord : données, puis API et tests, puis écrans.
 - L'issue est mise à jour avant le code. Une issue fermée ne se réécrit pas : on en ouvre une nouvelle.
 
 ## Design
 
-- Pré-maquettes (démo web, croquis, prototypes) : pour discuter avec le client, jamais une référence de code.
-- Le design final vit dans Claude Design : design system (tokens, typographie, composants) puis une planche par écran. Les tokens de `packages/ui` en sont la copie dans le code.
+- Un seul document Claude Design (artifact Design) : la planche « Design system » (couleurs clair et sombre, typographie, espacements, rayons, composants) puis une planche par écran. Pas d'artifact Design System séparé.
+- `packages/ui/src/tokens.css` est la copie des tokens dans le code (bloc `@theme`) : une valeur qui change se modifie dans la planche et dans `tokens.css` ensemble.
+- La démo client se fait dans ce document : ses planches deviennent les définitives. Pas de démo codée ; un croquis ou prototype reçu du client n'est jamais une référence de code.
 - Une planche est **éditée en place** avant le code, adaptée à l'US, et validée. Ni copie, ni planche par US, ni US « Maquette ». On garde l'état d'origine avant d'éditer.
 - Aucun écran codé sans planche validée. La conformité se vérifie à chaque US (captures iOS et Android en regard de la planche), pas par un audit final.
 

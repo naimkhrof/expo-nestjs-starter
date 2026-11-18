@@ -100,7 +100,7 @@ Inspirée des [bonnes pratiques Anthropic](https://code.claude.com/docs/en/best-
 | Spec d’une fonctionnalité | Le corps de son issue, écrit après l’interview de Claude |
 | Vérité durable | Code, tests, migrations, Swagger |
 
-1. **Démarrer** : `/backlog` avec ton cahier des charges ou ta maquette. Claude rédige `PRODUCT.md`, propose les issues (fondations : modèle de données et API d’abord) et ne les crée qu’après ton accord. Le cahier des charges ne sert plus ensuite.
+1. **Démarrer** : `/backlog` avec ton analyse des besoins. Claude rédige `PRODUCT.md`, propose les epics et US (fondations : modèle de données et API d’abord) et ne les crée qu’après ton accord. Puis la démo dans Claude Design, et le cahier des charges client généré depuis `PRODUCT.md` et les issues, à faire signer.
 2. **Développer** : `/story 12`. Claude lit l’issue, t’interviewe, met l’issue à jour, propose un plan backend → API → écrans, puis code, teste, fusionne dans `main` et pousse (commit `Closes #12`).
 3. **Changer d’avis** : on modifie l’issue avant le code ; une issue fermée ne se réécrit pas, on en ouvre une nouvelle qui la référence.
 

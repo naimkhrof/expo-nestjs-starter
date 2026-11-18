@@ -1,36 +1,35 @@
 ---
 name: backlog
-description: Cadrer une nouvelle app, importer un cahier des charges, créer ou découper epics et US, modifier une US, consigner une décision ou un changement client. Utiliser pour « importe mon cahier des charges », « crée les issues », « découpe cette feature », « modifie l'US 12 », « le client veut changer… » ou au démarrage d'un projet.
-argument-hint: [fichier, planche ou idée]
+description: Cadrer une nouvelle app à partir de l'analyse des besoins, rédiger PRODUCT.md, créer ou découper epics et US, générer le cahier des charges client, modifier une US, consigner une décision ou un changement client. Utiliser pour « on démarre un nouveau client », « crée les issues », « génère le cahier des charges », « découpe cette feature », « modifie l'US 12 », « le client veut changer… ».
+argument-hint: [notes, fichier ou idée]
 ---
 
 # Gérer le produit et le backlog
 
-Trois sources, chacune à un seul endroit (voir `CLAUDE.md`) : `PRODUCT.md` (le produit aujourd'hui), les GitHub Issues (epics, US, bugs, décisions), Claude Design (l'interface).
+Trois sources, chacune à un seul endroit (voir `CLAUDE.md`) : `PRODUCT.md` (le produit aujourd'hui), les GitHub Issues (epics, US, bugs, décisions), le document Claude Design (l'interface). Le cahier des charges client n'est pas une source : il est **généré** à partir des deux premières.
 
 ## Cadrer une app (avant tout code)
 
-1. Lire les sources (cahier des charges, devis, pré-maquette, notes client). Elles ne servent qu'à cet import.
+1. **Lire l'analyse des besoins** : notes d'entretien, documents du client, cahier des charges existant s'il y en a un. Ils ne servent qu'à ce cadrage et restent hors du dépôt.
 2. **Dépendances externes**, dans `PRODUCT.md` › Contraintes : droits sur les contenus, comptes stores, paiement, hébergement et RGPD, services tiers, et toute personne qui doit valider quelque chose (qui, quoi, délai, ce que la V1 fait sans elle). Ce qui bloque devient une issue en tête du backlog.
-3. Rédiger `PRODUCT.md` (une page), faire valider.
-4. **V1 figée** : la liste des epics de la V1 ; le reste prend le label `après-v1`. Aucun epic ne s'insère avant la sortie sans issue `decision`.
-5. Epics d'abord, puis US en sous-issues (voir plus bas). Une US = un comportement testable par un seul profil ; une règle absente des sources va dans « Questions client », jamais inventée.
-6. Présenter la liste complète (titres, labels, ordre, packs) et **attendre l'accord** avant de créer quoi que ce soit.
-7. Créer : labels `gh label create <nom> --force` (`epic`, `story`, `bug`, `decision`, `changement`, `question-client`, `après-v1`, `backend`, `mobile`, `backoffice`), vérifier les doublons (`gh issue list --state all --search …`), puis `gh issue create --body-file …`.
-8. **Revue à froid** avant le premier epic de code : un sous-agent relit `PRODUCT.md`, le modèle de données prévu et les epics, et cherche contradictions, dépendances oubliées, tables sans lecteur. Corriger avant de coder.
+3. **`PRODUCT.md`** (une page) : pour qui, proposition, V1 (les epics, une ligne chacun), hors périmètre, contraintes.
+4. **Epics puis US** : présenter la liste complète (titres, labels, ordre, packs) avec les critères d'acceptation, et **attendre l'accord** avant de créer quoi que ce soit. Une US = un comportement testable par un seul profil ; une règle absente des sources va dans « Questions client », jamais inventée.
+5. **Créer** : labels `gh label create <nom> --force` (`epic`, `us`, `bug`, `decision`, `changement`, `question-client`, `impacte-maquette`, `après-v1`, plus un label par profil), vérifier les doublons (`gh issue list --state all --search …`), puis `gh issue create --body-file …`. Chaque question client devient une issue `question-client`.
+6. **Direction visuelle et démo** (document Claude Design, voir `CLAUDE.md` › Design) : deux directions, le client en choisit une ; planche « Design system » ; trois à cinq planches clés pour la démo. Ces planches sont les définitives : on les éditera en place, epic par epic.
+7. **Cahier des charges généré** : un document client (artifact Docs, export PDF ou Word) produit depuis `PRODUCT.md` et les issues : contexte, profils, V1 par epic avec ses US et leurs critères en langage client, hors périmètre, dépendances et ce que le client fournit, jalons, lien de la démo. Rien n'y est ajouté qui ne soit d'abord dans `PRODUCT.md` ou une issue : une correction du client se fait dans la source, puis on régénère. Le document signé et le devis restent hors du dépôt.
+8. **V1 figée** à la signature : le reste prend le label `après-v1`. Aucun epic ne s'insère avant la sortie sans issue `decision`.
+9. **Revue à froid** avant le premier epic de code : un sous-agent relit `PRODUCT.md`, le modèle de données prévu et les epics, et cherche contradictions, dépendances oubliées, tables sans lecteur. Corriger avant de coder.
 
-Les sources importées restent hors du dépôt (dossier client) : jamais de `docs/` ni d'`archive/`.
+Le client arrive avec son propre cahier des charges : il compte comme une source de l'étape 1. On ne le tient pas à jour, et aucune US ne le cite.
 
-## Après l'import
+## Après la signature
 
-Le cahier des charges est importé une fois, puis on ne s'en sert plus : `PRODUCT.md` et les issues le remplacent, et aucune US ne le cite.
-
-- Circuit d'une US client (champ Status du GitHub Project) : Brouillon → À valider client → Gelé → Prêt dev → En cours → Terminé. Un retour client met à jour l'US + commentaire « Retour client du JJ/MM : … ».
-- Après le gel, toute demande du client est une issue `changement` : US touchées, impact délai et prix, accord du client. Puis on modifie les US.
+- Statuts d'une US (champ Status du GitHub Project) : Todo → En cours → Terminé. Une US en Todo est relue avant d'être développée. Un retour client met à jour l'US + commentaire « Retour client du JJ/MM : … ».
+- Toute demande nouvelle du client est une issue `changement` : US touchées, impact délai et prix, accord du client. Puis on modifie les US.
 
 ## Epics et packs
 
-- Epic = issue `epic` + `epic:<nom>` : objectif, dépendance, packs de session, contrats, sous-issues.
+- Epic = issue `epic` : objectif, dépendance, packs de session, contrats, sous-issues.
 - Sous-issues natives : `gh api -X POST repos/{owner}/{repo}/issues/<epic>/sub_issues -F sub_issue_id=<id>` où `<id>` = `gh api repos/{owner}/{repo}/issues/<n> --jq .id` ; ordre par `…/sub_issues/priority` (`sub_issue_id`, `after_id`).
 - Un pack = les US d'une même session (mêmes fichiers ou même validation). Après tout déplacement, régénérer la liste du corps de l'epic depuis l'API.
 
@@ -44,4 +43,4 @@ Le cahier des charges est importé une fois, puis on ne s'en sert plus : `PRODUC
 
 ## Décisions
 
-Une décision qui change le produit = une issue `decision` (modèle), puis `PRODUCT.md` réécrit **à l'état nouveau** à l'endroit concerné : pas de journal ni d'amendement daté.
+Une décision qui change le produit = une issue `decision`, puis `PRODUCT.md` réécrit **à l'état nouveau** à l'endroit concerné : pas de journal ni d'amendement daté.
