@@ -7,6 +7,11 @@ import { defineRailway, github, postgres, preserve, project, service, volume } f
  * Aperçu : `railway config plan` ; application : `railway config apply`.
  * Les secrets restent chez Railway (`preserve()`), jamais dans ce fichier.
  * Sur un projet Railway existant : `railway config pull` d'abord (voir README.md).
+ *
+ * Deux environnements Railway, une seule branche `main` :
+ * - `production` : tout le projet, données réelles ;
+ * - `staging` : l'API et sa base seulement, données jetables, pour la recette (build EAS
+ *   `preview`). Pas de sauvegarde. Viser un environnement : `--environment staging`.
  */
 
 /** Nom du projet : `slug` de starter.config.json (racine du dépôt), lancé depuis la racine ou `.railway/`. */
@@ -22,13 +27,14 @@ if (!repo) throw new Error(`Le remote origin n'est pas un dépôt GitHub : ${rem
 /** Amsterdam (UE) : base et API dans la même région, donc en réseau privé. */
 const REGION = "europe-west4-drams3a";
 
-export default defineRailway(() => {
+export default defineRailway((ctx) => {
+  const prod = ctx.isEnvironment("production");
   // Image Railway `postgres-ssl` : l'API passe par le réseau privé, sans SSL côté client.
   const Postgres = postgres("Postgres", { region: REGION });
   Postgres.networking = { privateNetworkEndpoint: "postgres" };
   const postgresVolume = volume("postgres-volume", {
     region: REGION,
-    sizeMB: 5000,
+    sizeMB: prod ? 5000 : 1000,
     allowOnlineResize: true,
     alerts: { usage: { "80": {}, "95": {}, "100": {} } },
   });
@@ -58,18 +64,21 @@ export default defineRailway(() => {
       drainingSeconds: 15,
     },
     replicas: { [REGION]: 1 },
-    // Domaine : à ajouter dans le tableau de bord Railway (le code ne peut pas l'enregistrer),
-    // puis `railway config pull` ; renseigner BACKEND_DOMAIN, FRONTEND_DOMAIN et APP_CORS_ORIGINS.
+    // Production : domaine à ajouter dans le tableau de bord Railway (le code ne peut pas
+    // l'enregistrer), puis `railway config pull` ; renseigner BACKEND_DOMAIN, FRONTEND_DOMAIN
+    // et APP_CORS_ORIGINS. Staging : domaine *.up.railway.app généré (`railway domain`),
+    // que ce fichier ne décrit pas.
     env: {
       NODE_ENV: "production",
       PORT: "8080",
-      APP_NAME: slug,
+      APP_NAME: prod ? slug : `${slug} (staging)`,
       API_PREFIX: "api",
       APP_FALLBACK_LANGUAGE: "en",
       APP_HEADER_LANGUAGE: "x-custom-lang",
-      FRONTEND_DOMAIN: "",
-      BACKEND_DOMAIN: "",
-      APP_CORS_ORIGINS: "",
+      // Staging : pas de back-office en ligne ; celui lancé en local peut viser cette API.
+      FRONTEND_DOMAIN: prod ? "" : "http://localhost:8081",
+      BACKEND_DOMAIN: prod ? "" : "https://${{RAILWAY_PUBLIC_DOMAIN}}",
+      APP_CORS_ORIGINS: prod ? "" : "http://localhost:8081",
       APP_TRUST_PROXY: "1",
       DATABASE_TYPE: "postgres",
       DATABASE_URL: Postgres.env.DATABASE_URL,
@@ -87,6 +96,7 @@ export default defineRailway(() => {
       MAIL_DEFAULT_EMAIL: "noreply@example.com",
       MAIL_DEFAULT_NAME: slug,
       MAIL_CLIENT_PORT: "1080",
+      // Secrets propres à chaque environnement, posés chez Railway.
       AUTH_JWT_SECRET: preserve(),
       AUTH_JWT_TOKEN_EXPIRES_IN: "15m",
       AUTH_REFRESH_SECRET: preserve(),
@@ -127,6 +137,6 @@ export default defineRailway(() => {
 
   return project(slug, {
     variables: { managed: true },
-    resources: [Postgres, postgresVolume, api, backup],
+    resources: prod ? [Postgres, postgresVolume, api, backup] : [Postgres, postgresVolume, api],
   });
 });

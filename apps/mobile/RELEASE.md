@@ -38,12 +38,21 @@ Crée le projet et affiche son identifiant. La configuration est dynamique : `ea
 
 ## 2. Variables d'environnement EAS
 
-Aucune clé serveur dans une variable `EXPO_PUBLIC_*` : elle serait lisible dans le binaire. Poser l'adresse de l'API de production et vérifier qu'aucune variable inattendue n'existe :
+Les `.env` locaux ne partent pas chez EAS : un build lit l'environnement EAS de son profil. Aucune clé serveur dans une variable `EXPO_PUBLIC_*` : elle serait lisible dans le binaire.
+
+| Profil | Environnement EAS | `EXPO_PUBLIC_API_URL` |
+|---|---|---|
+| `development` | development | aucune : le code vient de Metro, qui lit `apps/mobile/.env` |
+| `preview` | preview | API Railway `staging` (`.railway/README.md`) |
+| `production` | production | API Railway `production` |
 
 ```bash
+eas env:create --environment preview --name EXPO_PUBLIC_API_URL --value https://<api-staging> --visibility plaintext
 eas env:create --environment production --name EXPO_PUBLIC_API_URL --value https://api.example.com --visibility plaintext
 eas env:list --environment production
 ```
+
+Avant la sortie : couper le déploiement automatique de l'API `production` (Railway, service `api`, réglages, autodéploiement), puis la déployer à la main (« Deploy Latest Commit ») une fois la recette en staging validée.
 
 ## 3. Builds de production
 
