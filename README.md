@@ -34,7 +34,7 @@ Ce premier build compile et installe le dev client avec MMKV/Nitro, puis démarr
 - Back-office : `pnpm dev:backoffice`, http://localhost:8090. Connexion avec un compte `admin` de l’API (après `pnpm db:seed` : `admin@example.com`, mot de passe `secret`). L’origine est déjà dans `APP_CORS_ORIGINS` de l’exemple d’environnement de l’API.
 - Metro : port 8081. `pnpm dev:api` et `pnpm dev:mobile` démarrent séparément les apps.
 - `pnpm ios` / `pnpm android` créent le development build local, avec Xcode / Android Studio. **MMKV et Nitro nécessitent un development build** : les commandes mobiles `dev` et `start` ciblent explicitement le dev client.
-- `pnpm web` lance la cible web. Dans `apps/mobile/.env`, utiliser `http://10.0.2.2:3001` sur émulateur Android ou l’adresse LAN de l’ordinateur sur téléphone physique.
+- `pnpm web` lance la cible web. `EXPO_PUBLIC_API_URL` reste `http://localhost:3001` : en dev, l’app remplace `localhost` par l’adresse du Mac qui sert Metro (téléphone physique sur le même Wi-Fi, émulateur Android) ; une URL distante n’est jamais modifiée.
 - `pnpm mail:up` lance l’inbox SMTP facultative sur http://localhost:1080 pour les emails du boilerplate.
 - `pnpm db:down` arrête les conteneurs sans supprimer le volume. Chaque projet Compose utilise son nom propre ; ne pas réutiliser le volume d’une autre application.
 
