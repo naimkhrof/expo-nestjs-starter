@@ -9,6 +9,11 @@
       "type": "http",
       "url": "https://mcp.railway.com",
       "alwaysLoad": false
+    },
+    "expo": {
+      "type": "http",
+      "url": "https://mcp.expo.dev/mcp",
+      "alwaysLoad": false
     }
   }
 }

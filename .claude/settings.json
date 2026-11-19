@@ -36,6 +36,7 @@
   },
   "enabledMcpjsonServers": [
     "cloudflare",
-    "railway"
+    "railway",
+    "expo"
   ]
 }
