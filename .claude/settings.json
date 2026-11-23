@@ -31,12 +31,13 @@
       "Bash(git push -f:*)"
     ]
   },
-  "enabledPlugins": {
-    "expo@claude-plugins-official": true
-  },
   "enabledMcpjsonServers": [
     "cloudflare",
     "railway",
     "expo"
-  ]
+  ],
+  "enabledPlugins": {
+    "expo@claude-plugins-official": true,
+    "stripe@anthropic-plugin-directory": false
+  }
 }
