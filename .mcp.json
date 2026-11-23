@@ -14,6 +14,11 @@
       "type": "http",
       "url": "https://mcp.expo.dev/mcp",
       "alwaysLoad": false
+    },
+    "stripe": {
+      "type": "http",
+      "url": "https://mcp.stripe.com",
+      "alwaysLoad": false
     }
   }
 }

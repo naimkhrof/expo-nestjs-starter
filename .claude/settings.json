@@ -37,7 +37,6 @@
     "expo"
   ],
   "enabledPlugins": {
-    "expo@claude-plugins-official": true,
-    "stripe@anthropic-plugin-directory": false
+    "expo@claude-plugins-official": true
   }
 }
