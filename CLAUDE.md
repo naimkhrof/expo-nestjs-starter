@@ -41,7 +41,7 @@ Chaque information vit à un seul endroit ; on la réécrit à l'état nouveau, 
 
 ## Commandes
 
-- **Vérifier** : `pnpm typecheck`, `pnpm lint`, `pnpm test` ; `pnpm test:db` (migrations sur base jetable) ; `pnpm build` (bundles et API, sans build natif) ; `pnpm expo:doctor`.
+- **Vérifier** : `pnpm check` (typecheck et lint en parallèle, puis les tests) ; `pnpm test:db` (migrations sur base jetable) ; `pnpm build` (bundles et API, sans build natif) ; `pnpm expo:doctor`.
 - **Une app** : `pnpm --filter @starter/{mobile,api,backoffice} …`.
 - **Base** : `pnpm db:up`, `pnpm db:migrate`, `pnpm db:backup`. **Starter** : `pnpm test:starter`.
 
@@ -54,6 +54,7 @@ Chaque information vit à un seul endroit ; on la réécrit à l'état nouveau, 
 ## Pièges
 
 - MMKV/Nitro exigent un development build : Expo Go ne fonctionne pas.
+- Jest : passer par les scripts (`pnpm check`, `pnpm test`, `pnpm test:db`), qui ont `--forceExit`. Un Jest lancé à la main (`pnpm exec jest <chemin>`) prend aussi `--forceExit` et un `timeout` : sans ce flag, un handle ouvert (React Native, TypeORM) bloque Jest indéfiniment après la dernière suite.
 - `pnpm starter:init` doit précéder `pnpm setup:env`.
 - Un push sur `main` lance la CI.
 - Vérifications web : navigateur intégré de l'app Claude ; fermer les onglets temporaires.

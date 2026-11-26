@@ -40,7 +40,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
-    "test": "jest --runInBand --passWithNoTests",
+    "test": "jest --runInBand --passWithNoTests --forceExit",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -50,7 +50,7 @@
     "dev": "nest start --watch",
     "typecheck": "tsc --noEmit",
     "seed": "env-cmd -- ts-node -r tsconfig-paths/register ./src/database/seeds/relational/run-seed.ts",
-    "test:db": "env-cmd -- jest --config ./test/jest-db.json --runInBand"
+    "test:db": "env-cmd -- jest --config ./test/jest-db.json --runInBand --forceExit"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1157.0",
