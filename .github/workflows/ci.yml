@@ -2,11 +2,20 @@ name: CI
 on:
   push:
     branches: [main]
+    # Documentation-only pushes verify nothing new. CLAUDE.md files stay in:
+    # scripts/starter.test.mjs reads them.
+    paths-ignore:
+      - '**/*.md'
+      - '!**/CLAUDE.md'
+      - '.claude/**'
+      - LICENSE
   workflow_dispatch:
 permissions:
   contents: read
   actions: read
 jobs:
+  # Minutes: in a private repository every job is rounded up to the minute and reinstalls
+  # the dependencies, so all checks stay in this one job (CLAUDE.md, « CI et minutes »).
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -52,16 +61,27 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm setup:env
-      - run: pnpm test:starter
-      - run: pnpm typecheck
-      - run: pnpm lint
-      - run: pnpm test
-      - run: pnpm build
-      - run: pnpm db:up
-      - run: pnpm db:migrate
+      # The checks below are independent: each one runs even if a previous one failed,
+      # so a single run reports every failure.
+      - if: ${{ !cancelled() }}
+        run: pnpm test:starter
+      - if: ${{ !cancelled() }}
+        run: pnpm typecheck
+      - if: ${{ !cancelled() }}
+        run: pnpm lint
+      - if: ${{ !cancelled() }}
+        run: pnpm test
+      - if: ${{ !cancelled() }}
+        run: pnpm build
       # Migrations up and down on a throwaway database.
-      - run: pnpm test:db
-      - name: Smoke test API and Swagger
+      - if: ${{ !cancelled() }}
+        name: Database, migrations and SQL tests
+        run: |
+          pnpm db:up
+          pnpm db:migrate
+          pnpm test:db
+      - if: ${{ !cancelled() }}
+        name: Smoke test API and Swagger
         run: |
           pnpm --filter @starter/api start:prod > /tmp/starter-api.log 2>&1 &
           node scripts/smoke-api.mjs

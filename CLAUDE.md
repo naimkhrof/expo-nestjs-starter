@@ -51,11 +51,19 @@ Chaque information vit à un seul endroit ; on la réécrit à l'état nouveau, 
 - Réutiliser `packages/ui`, les tokens et le client Axios/TanStack Query. Une nouvelle dépendance se justifie dans le plan.
 - Toute chaîne visible dans chaque fichier de langue, mêmes clés (vérifié par un test). Tester chaque langue et iOS **et** Android dès le premier écran.
 
+## CI et minutes
+
+Un projet issu du starter est en général un dépôt privé : 2 000 minutes Actions par mois (GitHub Free, 3 000 avec Pro), chaque job arrondi à la minute supérieure.
+- Un push sur `main` lance la CI (`.github/workflows/ci.yml`) sur le dernier commit poussé seulement ; les pushs qui ne touchent que des `.md` (hors `CLAUDE.md`) ou `.claude/` ne lancent rien. Railway ne déploie l'API qu'après une CI verte.
+- La CI rejoue ce qui a été vérifié en local (`pnpm check`, plus `pnpm build`, `pnpm test:db` selon le changement), elle ne le remplace pas.
+- **Pousser une fois par pack**, pas après chaque US : une fusion par US en local, un push à la fin du pack (skill `story`).
+- **`[skip ci]`** dans le message de tout commit sans code : documentation, `CLAUDE.md` (après `pnpm test:starter`, qui les lit), skills, modèles d'issue. Jamais sur un commit qui touche du code, une config, le lockfile ou une migration : Railway déploierait l'API sans CI. GitHub ne lit que le dernier commit d'un push : un commit `[skip ci]` ne finit jamais un push qui contient du code.
+- Un seul job de vérification : ne pas l'éclater en jobs parallèles ni en shards (chaque job réinstalle les dépendances et s'arrondit à la minute).
+
 ## Pièges
 
 - MMKV/Nitro exigent un development build : Expo Go ne fonctionne pas.
 - Jest : `forceExit` est dans chaque config Jest, y compris pour un `jest <chemin>` lancé à la main. C'est une soupape : un handle ouvert se corrige à la source (`--detectOpenHandles` pour le trouver, fermeture dans `afterAll`). Les tests base et e2e ont `bail` et `verbose` ; un test qui attend jusqu'à son `testTimeout` est un test cassé, pas un délai à allonger. Sous Claude Code, Jest 30 passe seul en rapport agent (échecs et résumé seulement, `verbose` ignoré) : un silence n'est pas un blocage ; lancer les suites longues en arrière-plan.
 - `pnpm starter:init` doit précéder `pnpm setup:env`.
-- Un push sur `main` lance la CI.
 - Vérifications web : navigateur intégré de l'app Claude ; fermer les onglets temporaires.
 - Cloudflare (DNS, R2, Workers), Railway et Expo (EAS, builds, documentation) : MCP `cloudflare`, `railway` et `expo` du projet (`.mcp.json`, OAuth, chargés à la demande), jamais le tableau de bord dans le navigateur. Les clés d'accès (R2, jetons d'API) se créent à la main.
