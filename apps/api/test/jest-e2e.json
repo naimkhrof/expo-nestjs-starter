@@ -6,5 +6,8 @@
   "testPathIgnorePatterns": ["/node_modules/", "<rootDir>/generators/"],
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
-  }
+  },
+  "forceExit": true,
+  "bail": 1,
+  "verbose": true
 }

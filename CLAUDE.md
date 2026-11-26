@@ -54,7 +54,7 @@ Chaque information vit à un seul endroit ; on la réécrit à l'état nouveau, 
 ## Pièges
 
 - MMKV/Nitro exigent un development build : Expo Go ne fonctionne pas.
-- Jest : passer par les scripts (`pnpm check`, `pnpm test`, `pnpm test:db`), qui ont `--forceExit`. Un Jest lancé à la main (`pnpm exec jest <chemin>`) prend aussi `--forceExit` et un `timeout` : sans ce flag, un handle ouvert (React Native, TypeORM) bloque Jest indéfiniment après la dernière suite.
+- Jest : `forceExit` est dans chaque config Jest, y compris pour un `jest <chemin>` lancé à la main. C'est une soupape : un handle ouvert se corrige à la source (`--detectOpenHandles` pour le trouver, fermeture dans `afterAll`). Les tests base et e2e ont `bail` et `verbose` ; un test qui attend jusqu'à son `testTimeout` est un test cassé, pas un délai à allonger. Sous Claude Code, Jest 30 passe seul en rapport agent (échecs et résumé seulement, `verbose` ignoré) : un silence n'est pas un blocage ; lancer les suites longues en arrière-plan.
 - `pnpm starter:init` doit précéder `pnpm setup:env`.
 - Un push sur `main` lance la CI.
 - Vérifications web : navigateur intégré de l'app Claude ; fermer les onglets temporaires.

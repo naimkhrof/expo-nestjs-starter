@@ -33,7 +33,7 @@
     "lint": "eslint src env.ts app.config.ts metro.config.js jest.config.js jest-setup.ts scripts",
     "lint:fix": "eslint . --fix",
     "type-check": "tsc --noemit",
-    "test": "jest --maxWorkers=50% --forceExit",
+    "test": "jest --maxWorkers=50%",
     "check-all": "pnpm lint && pnpm typecheck && pnpm test",
     "test:ci": "jest --ci --runInBand --coverage",
     "test:watch": "pnpm run test --watch",

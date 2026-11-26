@@ -1,4 +1,6 @@
 module.exports = {
+  // Soupape : un test qui laisse un handle ouvert ne bloque plus Jest après la dernière suite.
+  forceExit: true,
   preset: 'jest-expo',
   testMatch: ['**/?(*.)+(spec|test).ts?(x)'],
   moduleNameMapper: {

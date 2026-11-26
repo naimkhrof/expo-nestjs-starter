@@ -9,7 +9,7 @@
     "build": "expo export --platform web --output-dir dist",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src metro.config.js",
-    "test": "jest --runInBand --watchman=false --forceExit",
+    "test": "jest --runInBand --watchman=false",
     "deploy": "pnpm build && wrangler deploy"
   },
   "dependencies": {
