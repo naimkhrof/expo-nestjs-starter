@@ -43,6 +43,6 @@ Branche `story/<n>-<slug>` ou `fix/<n>-<slug>`. Si le besoin change en route : a
 1. `pnpm typecheck`, `pnpm lint`, `pnpm test` (+ `pnpm test:db` si migration, `pnpm build` si config ou dépendances).
 2. Relecture du diff contre l'issue par un sous-agent (`scout` haiku ou `worker` sonnet, modèle explicite) ; corriger.
 3. Écran : simulateur iOS **et** émulateur Android, dans chaque langue ; captures en regard de la planche, écarts corrigés ou signalés. Back-office : navigateur intégré.
-4. Sans PR ni confirmation : commit (Conventional Commits, français), `git switch main && git pull --ff-only && git merge --no-ff <branche>` avec `Closes #<n>`, branche supprimée. Push de `main` une fois par pack (après sa dernière US ; US seule ou bug : tout de suite), puis issues fermées et cochées (`CLAUDE.md`, « CI et minutes »).
+4. Sans PR ni confirmation : commit (Conventional Commits, français), `git switch main && git pull --ff-only && git merge --no-ff <branche>` avec `Closes #<n>`, branche supprimée. Push de `main` en fin de session seulement (après la dernière US ou le dernier bug ; plus tôt si un déploiement est attendu : correctif urgent, essai sur build), puis issues fermées et cochées (`CLAUDE.md`, « CI et minutes »).
 
 Conflit ou vérification en échec : s'arrêter et le dire. Toujours signaler ce qui n'a pas été vérifié.

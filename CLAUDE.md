@@ -56,7 +56,7 @@ Chaque information vit à un seul endroit ; on la réécrit à l'état nouveau, 
 Un projet issu du starter est en général un dépôt privé : 2 000 minutes Actions par mois (GitHub Free, 3 000 avec Pro), chaque job arrondi à la minute supérieure.
 - Un push sur `main` lance la CI (`.github/workflows/ci.yml`) sur le dernier commit poussé seulement ; les pushs qui ne touchent que des `.md` (hors `CLAUDE.md`) ou `.claude/` ne lancent rien. Railway ne déploie l'API qu'après une CI verte.
 - La CI rejoue ce qui a été vérifié en local (`pnpm check`, plus `pnpm build`, `pnpm test:db` selon le changement), elle ne le remplace pas.
-- **Pousser une fois par pack**, pas après chaque US : une fusion par US en local, un push à la fin du pack (skill `story`).
+- **Pousser en fin de session**, pas après chaque US, pack ou bug : une fusion par US en local, un seul push quand la session s'arrête (skill `story`). Plus tôt seulement si un déploiement est attendu : correctif urgent en production, essai sur build.
 - **`[skip ci]`** dans le message de tout commit sans code : documentation, `CLAUDE.md` (après `pnpm test:starter`, qui les lit), skills, modèles d'issue. Jamais sur un commit qui touche du code, une config, le lockfile ou une migration : Railway déploierait l'API sans CI. GitHub ne lit que le dernier commit d'un push : un commit `[skip ci]` ne finit jamais un push qui contient du code.
 - Un seul job de vérification : ne pas l'éclater en jobs parallèles ni en shards (chaque job réinstalle les dépendances et s'arrondit à la minute).
 
