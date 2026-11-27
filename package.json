@@ -18,7 +18,7 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "check": "turbo run typecheck lint && turbo run test",
+    "check": "turbo run typecheck lint && turbo run test && pnpm lint:instructions",
     "db:up": "docker compose up -d --wait postgres",
     "db:down": "docker compose down",
     "db:logs": "docker compose logs -f postgres",
@@ -32,7 +32,8 @@
     "setup:env": "node scripts/setup.mjs",
     "expo:doctor": "pnpm --filter @starter/mobile run doctor",
     "starter:init": "node scripts/init.mjs",
-    "test:starter": "node --test scripts/starter.test.mjs"
+    "test:starter": "node --test scripts/starter.test.mjs",
+    "lint:instructions": "node scripts/lint-instructions.mjs"
   },
   "devDependencies": {
     "turbo": "2.11.10"

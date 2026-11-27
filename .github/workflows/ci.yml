@@ -2,12 +2,12 @@ name: CI
 on:
   push:
     branches: [main]
-    # Documentation-only pushes verify nothing new. CLAUDE.md files stay in:
-    # scripts/starter.test.mjs reads them.
+    # Instruction- and documentation-only pushes verify nothing new (lint:instructions runs in pnpm check).
     paths-ignore:
       - '**/*.md'
-      - '!**/CLAUDE.md'
-      - '.claude/**'
+      - '**/CLAUDE.md'
+      - '**/.claude/**'
+      - '.github/ISSUE_TEMPLATE/**'
       - LICENSE
   workflow_dispatch:
 permissions:

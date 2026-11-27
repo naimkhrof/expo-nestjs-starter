@@ -7,13 +7,11 @@
   - Conserver les modules, domaines, repositories, persistences et mappers de Brocoders.
   - Pas d'entité inutile pour un endpoint sans persistence.
 - Un exemple `POST(Request)` destiné à Next.js ou Expo se traduit vers NestJS, avec le routage et la validation existants. Les controllers HTTP restent ici.
-- **Où contrôler** : ce que la base peut tenir seule est une contrainte SQL ; ce qui croise plusieurs tables se contrôle dans le service.
 
 ## Base et migrations
 
 - `pnpm db:up`, `pnpm db:migrate`. Les migrations vivent dans `src/database/migrations`.
-- `migration:generate` ne compare pas les `CHECK` : les écrire à la main dans la migration.
-- `env-cmd` écrase les variables du shell sans `--no-override` : pour viser une autre base, l'ajouter (`env-cmd --no-override -- …`) ou donner `DATABASE_URL` en entier.
+- Règles d'écriture des migrations : `.claude/rules/migrations.md`.
 - **Sauvegardes**, hors du dépôt (`~/<slug>-backups` ou `DB_BACKUP_DIR`) : `pnpm db:backup`, `pnpm db:backup:verify <fichier>` (base jetable), `pnpm db:restore <fichier> --force`.
 
 ## Sécurité et configuration
