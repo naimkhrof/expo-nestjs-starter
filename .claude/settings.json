@@ -37,6 +37,20 @@
     "expo"
   ],
   "enabledPlugins": {
-    "expo@claude-plugins-official": true
+    "expo@claude-plugins-official": true,
+    "workflow@naim-workflow": true
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}\"/scripts/guard-protected.mjs"
+          }
+        ]
+      }
+    ]
   }
 }
