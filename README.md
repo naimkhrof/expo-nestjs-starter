@@ -92,7 +92,7 @@ Pas de pull request : un push sur `main` lance la CI. Elle exécute les tests d�
 
 ## Méthode de travail avec Claude Code
 
-Les skills `story`, `backlog` et `design` viennent du plugin privé `workflow` du porteur (`workflow@naim-workflow`, activé dans `.claude/settings.json`) ; sans lui, le dépôt fonctionne mais sans ces procédures.
+Les skills `story`, `backlog` et `design` viennent du plugin privé `workflow` du porteur (`workflow@naim-workflow`, activé dans `.claude/settings.json`) ; sans lui, le dépôt fonctionne mais sans ces procédures. Sur une nouvelle machine du porteur : `claude plugin marketplace add naimkhrof/naim-workflow` (dépôt privé), puis le plugin se charge seul dans le projet.
 
 Inspirée des [bonnes pratiques Anthropic](https://code.claude.com/docs/en/best-practices) : chaque information vit à un seul endroit.
 
