@@ -41,7 +41,7 @@ Un token qui change se modifie dans `tokens.css` et sur la planche `Design syste
 
 ## Supprimer
 
-- Écran retiré ou remplacé : sa planche est supprimée, après avoir repointé ou retiré les liens (`href`, `<dc-import>`) des planches actives vers elle. Une ancienne version se relit dans l'historique du document.
+- Écran retiré ou remplacé : sa planche est supprimée, après avoir vérifié que le code ne la cite plus (`grep -rn <nom> apps packages`) et repointé ou retiré les liens (`href`, `<dc-import>`) des planches actives vers elle. Le code fait foi : une planche qu'il cite est vivante, quel que soit son nom. Une ancienne version se relit dans l'historique du document.
 - Exploration tranchée : la direction retenue passe en page active, le reste est supprimé.
 - Ménage à la fin de chaque epic : chaque planche active correspond à un écran du code ou d'une issue ouverte, sinon elle est supprimée.
 
