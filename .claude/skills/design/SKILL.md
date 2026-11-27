@@ -1,6 +1,6 @@
 ---
 name: design
-description: Tenir le document Claude Design de l'app (pages, planches, nommage, versions, archive) et relier une planche à une issue. Utiliser pour créer ou modifier une planche, ranger ou archiver des maquettes, « fais la maquette de… », « range Claude Design », ou quand `story` et `backlog` touchent un écran.
+description: Tenir le document Claude Design de l'app (pages, planches, nommage, versions, suppression) et relier une planche à une issue. Utiliser pour créer ou modifier une planche, ranger ou supprimer des maquettes, « fais la maquette de… », « range Claude Design », ou quand `story` et `backlog` touchent un écran.
 argument-hint: [écran, issue ou « ménage »]
 ---
 
@@ -12,7 +12,7 @@ Un document Claude Design par app (artifact de type Design), dont le lien est da
 
 - La planche `Design system` (tokens, copie de `packages/ui/src/tokens.css`, et composants) vient en tête. Puis un écran par planche, groupé par flux ou par thème sous une note de section.
 - Une page par surface seulement quand le document en dessine plusieurs (`App`, `Web`…). Sans pages, tout le document est actif.
-- `Explorations` (directions visuelles, variantes, écrans d'après la V1) et `Archive · <sujet>` (écrans retirés ou remplacés) se créent au premier besoin. Le code ne s'y réfère jamais.
+- `Explorations` (directions visuelles, variantes, écrans d'après la V1) se crée au premier besoin ; le code ne s'y réfère jamais. Pas de page d'archive : l'historique des versions du document garde tout.
 - Aucun autre artifact de maquette : la démo client et les directions visuelles vivent dans ce document.
 - Un écran n'existe qu'une fois : pas de copie ni de « v2 », pas de « Duplicate ».
 
@@ -39,15 +39,15 @@ La section « Maquette » de l'issue porte, par planche, le lien profond `https:
 
 Un token qui change se modifie dans `tokens.css` et sur la planche `Design system` dans la même US.
 
-## Archiver
+## Supprimer
 
-- Écran retiré ou remplacé : sa planche est déplacée (champ `page` dans `canvas.json`) vers une page `Archive · <sujet>`, jamais copiée.
-- Exploration tranchée : la direction retenue passe en page active, le reste en archive.
-- Ménage à la fin de chaque epic : chaque planche active correspond à un écran du code ou d'une issue ouverte, sinon archive. On ne change que l'index (`canvas.json`) : pages, déplacements, titres.
+- Écran retiré ou remplacé : sa planche est supprimée, après avoir repointé ou retiré les liens (`href`, `<dc-import>`) des planches actives vers elle. Une ancienne version se relit dans l'historique du document.
+- Exploration tranchée : la direction retenue passe en page active, le reste est supprimé.
+- Ménage à la fin de chaque epic : chaque planche active correspond à un écran du code ou d'une issue ouverte, sinon elle est supprimée.
 
 ## Sources
 
-- Figma, [Team file organization](https://www.figma.com/best-practices/team-file-organization/) : un seul axe de rangement, exploration séparée du validé, un écran n'existe qu'une fois, noms lisibles seuls, versions nommées aux jalons, archive à côté du travail actif.
+- Figma, [Team file organization](https://www.figma.com/best-practices/team-file-organization/) : un seul axe de rangement, exploration séparée du validé, un écran n'existe qu'une fois, noms lisibles seuls, versions nommées aux jalons, l'historique des versions plutôt que des copies.
 - Figma, [Dev Mode statuses](https://help.figma.com/hc/en-us/articles/26781702258583-Dev-Mode-statuses-and-notifications) : pas de statut de page, d'où une convention maison (ici, dans l'issue).
 - [Linear et Figma](https://linear.app/docs/figma), [Figma for Jira](https://www.atlassian.com/blog/add-ons/developer-designer-collaborate-with-figma-jira-integration) : le ticket porte le lien profond vers la frame.
 - NN/g, [Empty states](https://www.nngroup.com/articles/empty-state-interface-design/) : un état vide dit l'état du système et mène à l'action suivante.
