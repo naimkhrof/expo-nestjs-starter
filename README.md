@@ -55,7 +55,7 @@ apps/api/          NestJS, auth, fichiers, Swagger, TypeORM, limite de débit et
 apps/backoffice/   Expo web seul (port 8090) : connexion admin et liste des utilisateurs de l’API
 packages/ui/       @starter/ui : tokens de design et primitives partagées (Button, Input, Text), livrés en sources
 scripts/           Initialisation, environnements, sauvegarde de la base, smoke test
-.claude/skills/    Skills Claude Code : méthode (story, backlog) et guides techniques
+.claude/skills/    Skills Claude Code : méthode (story, backlog, design) et guides techniques
 .github/           CI et modèles d’issues (US, bug)
 PRODUCT.md         Fiche produit d’une page
 ```

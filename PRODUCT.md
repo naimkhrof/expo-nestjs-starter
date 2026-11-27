@@ -20,7 +20,7 @@ Ce que l'app ne fait pas, volontairement.
 
 ## Design
 
-Lien du document Claude Design (planche « Design system » puis une planche par écran). C'est la seule référence du design final.
+Lien du document Claude Design (pages `Design system`, une par surface, `Explorations`, archives ; skill `design`). C'est la seule référence du design final.
 
 ## Contraintes et dépendances externes
 

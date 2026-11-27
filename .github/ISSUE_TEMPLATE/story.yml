@@ -22,7 +22,7 @@ body:
     id: design
     attributes:
       label: Maquette
-      description: Planche Claude Design (nom et lien), à créer / à modifier / validée. Aucune pour une US sans écran.
+      description: Par planche, le lien profond Claude Design (…#artboard-<chemin>) et son état : à créer / à modifier / validée. Aucune pour une US sans écran.
   - type: textarea
     id: rules
     attributes:
