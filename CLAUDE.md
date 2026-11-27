@@ -26,8 +26,8 @@ Chaque information vit à un seul endroit ; on la réécrit à l'état nouveau, 
 
 ## Design
 
-- Un seul document Claude Design par app (artifact Design). Pages : `Design system`, une page par surface (`App`, `Web`…), `Explorations`, `Archive · <surface>`. Seules `Design system` et les pages de surface font référence pour le code. Pas d'autre artifact de maquette. Nommage, versions, archive : skill `design`.
-- `packages/ui/src/tokens.css` est la copie des tokens dans le code (bloc `@theme`) : une valeur qui change se modifie sur la page `Design system` et dans `tokens.css` ensemble.
+- Un seul document Claude Design par app (artifact Design) : la planche « Design system » (couleurs clair et sombre, typographie, espacements, rayons, composants) puis une planche par écran ; `Explorations` et `Archive · …` à part, jamais référence du code. Pas d'autre artifact de maquette. Rangement, nommage, archive : skill `design`.
+- `packages/ui/src/tokens.css` est la copie des tokens dans le code (bloc `@theme`) : une valeur qui change se modifie sur la planche et dans `tokens.css` ensemble.
 - La démo client et les directions visuelles se font dans ce document : leurs planches deviennent les définitives. Pas de démo codée ; un croquis ou prototype reçu du client n'est jamais une référence de code.
 - Une planche est **éditée en place** avant le code, adaptée à l'US, et validée. Ni copie, ni planche par US, ni US « Maquette ». L'état d'origine est gardé par une version nommée, pas par une copie.
 - L'issue pointe vers la planche (lien profond et état, section « Maquette ») ; la planche ne cite pas d'issue.

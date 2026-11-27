@@ -20,7 +20,7 @@ L'issue est la seule spec : elle est mise à jour **avant** le code. Les règles
 
 - `gh issue view <n> --comments`, `PRODUCT.md`, le code concerné.
 - Issue fermée : ne pas la rouvrir ; créer « Modifier #<n> : … » (skill `backlog`) et travailler dessus.
-- Écran : ouvrir la planche Claude Design citée dans l'issue (skill `design` : version `#<n> avant`, édition en place, lien et état dans l'issue). Pas de planche validée → s'arrêter : la planche se fait d'abord. Un bug ou une US sans écran n'en a pas besoin.
+- Écran : ouvrir la planche Claude Design citée dans l'issue (skill `design` : édition en place, publication `#<n>`, lien et état dans l'issue). Pas de planche validée → s'arrêter : la planche se fait d'abord. Un bug ou une US sans écran n'en a pas besoin.
 
 ## 2. Interviewer
 
