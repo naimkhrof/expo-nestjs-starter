@@ -55,7 +55,7 @@ apps/api/          NestJS, auth, fichiers, Swagger, TypeORM, limite de débit et
 apps/backoffice/   Expo web seul (port 8090) : connexion admin et liste des utilisateurs de l’API
 packages/ui/       @starter/ui : tokens de design et primitives partagées (Button, Input, Text), livrés en sources
 scripts/           Initialisation, environnements, sauvegarde de la base, smoke test
-.claude/skills/    Skills Claude Code : méthode (story, backlog, design) et guides techniques
+.claude/           Réglages, règles à portée et skill turborepo ; apps/api/.claude/skills : generate, nestjs-best-practices
 .github/           CI et modèles d’issues (US, bug)
 PRODUCT.md         Fiche produit d’une page
 ```
@@ -92,6 +92,8 @@ Pas de pull request : un push sur `main` lance la CI. Elle exécute les tests d�
 
 ## Méthode de travail avec Claude Code
 
+Les skills `story`, `backlog` et `design` viennent du plugin privé `workflow` du porteur (`workflow@naim-workflow`, activé dans `.claude/settings.json`) ; sans lui, le dépôt fonctionne mais sans ces procédures.
+
 Inspirée des [bonnes pratiques Anthropic](https://code.claude.com/docs/en/best-practices) : chaque information vit à un seul endroit.
 
 | Quoi | Où |
@@ -104,6 +106,10 @@ Inspirée des [bonnes pratiques Anthropic](https://code.claude.com/docs/en/best-
 1. **Démarrer** : `/backlog` avec ton analyse des besoins. Claude rédige `PRODUCT.md`, propose les epics et US (fondations : modèle de données et API d’abord) et ne les crée qu’après ton accord. Puis la démo dans Claude Design, et le cahier des charges client généré depuis `PRODUCT.md` et les issues, à faire signer.
 2. **Développer** : `/story 12`. Claude lit l’issue, t’interviewe, met l’issue à jour, propose un plan backend → API → écrans, puis code, teste, fusionne dans `main` et pousse (commit `Closes #12`).
 3. **Changer d’avis** : on modifie l’issue avant le code ; une issue fermée ne se réécrit pas, on en ouvre une nouvelle qui la référence.
+
+## Jeton Cloudflare du back-office
+
+Procédure ponctuelle, à faire à la main, une fois par app. Dans Cloudflare › My Profile › API Tokens, créer un jeton avec le modèle « Edit Cloudflare Workers », nommé `GitHub CI <domaine>` ; Account Resources = le compte de l'app, Zone Resources = la zone du domaine. Le coller soi-même : `gh secret set CLOUDFLARE_API_TOKEN --repo <owner>/<repo>`. La CI lit aussi les variables `CLOUDFLARE_ACCOUNT_ID` et `BACKOFFICE_API_URL`.
 
 ## IA et EAS
 
