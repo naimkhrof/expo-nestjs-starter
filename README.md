@@ -33,6 +33,7 @@ Ce premier build compile et installe le dev client avec MMKV/Nitro, puis démarr
 - API : http://localhost:3001 ; Swagger : http://localhost:3001/docs (fermé quand `NODE_ENV=production`).
 - Back-office : `pnpm dev:backoffice`, http://localhost:8090. Connexion avec un compte `admin` de l’API (après `pnpm db:seed` : `admin@example.com`, mot de passe `secret`). L’origine est déjà dans `APP_CORS_ORIGINS` de l’exemple d’environnement de l’API.
 - Metro : port 8081. `pnpm dev:api` et `pnpm dev:mobile` démarrent séparément les apps.
+- `pnpm dev` (`scripts/dev.mjs`) arrête les anciens lancements du dépôt, démarre Docker et Postgres, et prend le port suivant quand un autre projet tient le sien (Postgres, API, back-office, Metro) ; l'API reçoit le port de la base et l'origine du back-office. Metro (`apps/mobile/scripts/start.mjs`) refait seul prebuild et `expo run:ios` quand l'empreinte native (`@expo/fingerprint`) a changé depuis le dernier build, quand `ios/` manque ou que l'app n'est pas sur le simulateur démarré ; `pnpm ios` force le build.
 - `pnpm ios` / `pnpm android` créent le development build local, avec Xcode / Android Studio. **MMKV et Nitro nécessitent un development build** : les commandes mobiles `dev` et `start` ciblent explicitement le dev client.
 - `pnpm web` lance la cible web. `EXPO_PUBLIC_API_URL` reste `http://localhost:3001` : en dev, l’app remplace `localhost` par l’adresse du Mac qui sert Metro (téléphone physique sur le même Wi-Fi, émulateur Android) ; une URL distante n’est jamais modifiée.
 - `pnpm mail:up` lance l’inbox SMTP facultative sur http://localhost:1080 pour les emails du boilerplate.
@@ -40,7 +41,7 @@ Ce premier build compile et installe le dev client avec MMKV/Nitro, puis démarr
 
 `pnpm dev` utilise l'interface interactive de Turbo : sélectionner `@starter/mobile#dev` avec les flèches, puis appuyer sur `Entrée` pour envoyer les raccourcis à Expo (`i` : iOS, `a` : Android, `r` : recharger, `m` : menu développeur). `Ctrl+Z` rend le focus à Turbo. `pnpm dev:mobile` donne directement le terminal Expo ; lancer alors `pnpm dev:api` dans un second terminal.
 
-Après une modification des dépendances ou de la configuration native, reconstruire avec `pnpm ios` ou `pnpm android`. Si la configuration native a changé, exécuter d'abord `pnpm --filter @starter/mobile exec expo prebuild --platform ios` (ou `android`). Un rechargement JavaScript ne peut pas ajouter Nitro/MMKV à un ancien binaire.
+Après une modification des dépendances ou de la configuration native, `pnpm dev` refait le build iOS de lui-même (`pnpm ios` le force) ; pour Android, `pnpm --filter @starter/mobile exec expo prebuild --platform android` puis `pnpm android`. Si plusieurs équipes Apple sont sur le Mac, renseigner `ios.appleTeamId` dans `app.config.ts` : sinon le build échoue sur la question de l'équipe. Un rechargement JavaScript ne peut pas ajouter Nitro/MMKV à un ancien binaire.
 
 `setup:env` crée les trois `.env` sans écraser les fichiers existants. Le mot de passe PostgreSQL est généré une fois et partagé entre Compose et l’API ; les quatre secrets JWT sont générés séparément. Les exemples ne contiennent aucune clé réelle. Les `.env` restent locaux. Après modification des identifiants PostgreSQL, un volume initialisé conserve ses anciens identifiants.
 

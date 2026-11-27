@@ -5,7 +5,7 @@
   "description": "Back-office : Expo web seul, ouvert par un compte administrateur de l'API.",
   "main": "expo-router/entry",
   "scripts": {
-    "dev": "expo start --web --port 8090",
+    "dev": "expo start --web --port ${BACKOFFICE_PORT:-8090}",
     "build": "expo export --platform web --output-dir dist",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src metro.config.js",

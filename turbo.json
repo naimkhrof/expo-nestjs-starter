@@ -18,6 +18,13 @@
       ],
       "dependsOn": [
         "^build"
+      ],
+      "passThroughEnv": [
+        "APP_PORT",
+        "APP_CORS_ORIGINS",
+        "BACKOFFICE_PORT",
+        "DATABASE_PORT",
+        "METRO_PORT"
       ]
     },
     "build": {

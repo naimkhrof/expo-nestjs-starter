@@ -9,9 +9,9 @@
   },
   "main": "expo-router/entry",
   "scripts": {
-    "start": "expo start --dev-client",
+    "start": "node scripts/start.mjs",
     "android": "expo run:android",
-    "ios": "expo run:ios",
+    "ios": "node scripts/start.mjs --build",
     "web": "expo start --web",
     "xcode": "xed -b ios",
     "doctor": "npx expo-doctor@latest",
@@ -37,7 +37,7 @@
     "check-all": "pnpm lint && pnpm typecheck && pnpm test",
     "test:ci": "jest --ci --runInBand --coverage",
     "test:watch": "pnpm run test --watch",
-    "dev": "expo start --dev-client",
+    "dev": "node scripts/start.mjs",
     "build": "expo export --platform ios --platform android",
     "typecheck": "tsc --noEmit",
     "native:prebuild": "pnpm expo prebuild"
